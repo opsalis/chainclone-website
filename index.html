@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChainClone — Clone Any Blockchain to Yours</title>
+  <meta name="description" content="Migrate smart contracts, state, and balances between EVM chains. Clone any blockchain to your own chain in minutes. Free migration to L2aaS chains.">
+  <meta name="keywords" content="blockchain migration, chain clone, smart contract migration, EVM migration, contract state transfer, blockchain cloning, cross-chain migration">
+  <link rel="canonical" href="https://chainclone.net/">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x1F9EC;</text></svg>">
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://chainclone.net/">
+  <meta property="og:title" content="ChainClone — Clone Any Blockchain to Yours">
+  <meta property="og:description" content="Migrate smart contracts, storage state, and balances between EVM chains. Free migration to L2aaS chains.">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ChainClone — Clone Any Blockchain to Yours">
+  <meta name="twitter:description" content="Migrate smart contracts, storage state, and balances between EVM chains. Free migration to L2aaS chains.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: { DEFAULT: '#6366f1', dark: '#4f46e5', light: '#e0e7ff', 50: '#eef2ff' },
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+    .btn-primary { background-color: #6366f1; color: #fff; }
+    .btn-primary:hover { background-color: #4f46e5; transform: translateY(-1px); }
+    .btn-primary { transition: all 0.2s ease; }
+    .btn-outline { border: 2px solid #6366f1; color: #6366f1; }
+    .btn-outline:hover { background-color: #eef2ff; }
+    .btn-outline { transition: all 0.2s ease; }
+    .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+    .faq-answer.open { max-height: 500px; }
+    .faq-toggle svg { transition: transform 0.2s ease; }
+    .faq-toggle.open svg { transform: rotate(180deg); }
+    .mobile-menu { display: none; }
+    .mobile-menu.open { display: flex; }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "ChainClone",
+    "description": "Clone any blockchain to yours. Migrate smart contracts, storage state, and balances between EVM chains.",
+    "url": "https://chainclone.net",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Any",
+    "offers": [
+      {
+        "@type": "Offer",
+        "name": "Free — L2aaS Migration",
+        "price": "0",
+        "priceCurrency": "USD",
+        "description": "Migrate contracts and state to your L2aaS blockchain for free"
+      },
+      {
+        "@type": "Offer",
+        "name": "Paid — Any EVM Chain",
+        "price": "500",
+        "priceCurrency": "USD",
+        "description": "Migrate contracts and state to any EVM chain — Base, Polygon, Arbitrum, Ethereum"
+      }
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Is this legal?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. All blockchain data is public by design. We read publicly available on-chain state — contract bytecode, storage slots, and account balances. No private data is accessed."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Will contract addresses change?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Contracts are deployed fresh on the destination chain, so they receive new addresses. We provide a full mapping of old-to-new addresses after migration."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How long does migration take?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Simple contracts migrate in minutes. Complex deployments with many dependencies can take a few hours. We provide real-time progress updates."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What about contract dependencies?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Contracts that reference other contracts need all dependencies migrated together. We analyze the dependency graph and migrate everything in the correct order."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body class="bg-white text-gray-900 antialiased">
+
+  <!-- Nav -->
+  <nav class="border-b border-gray-200 bg-white/90 backdrop-blur-md sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="/" class="text-xl font-bold tracking-tight">
+        <span class="text-indigo-600">Chain</span><span class="text-gray-900">Clone</span>
+      </a>
+      <div class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-600">
+        <a href="#how-it-works" class="hover:text-gray-900 transition">How It Works</a>
+        <a href="#pricing" class="hover:text-gray-900 transition">Pricing</a>
+        <a href="#what-we-migrate" class="hover:text-gray-900 transition">What We Migrate</a>
+        <a href="#faq" class="hover:text-gray-900 transition">FAQ</a>
+        <a href="/terms.html" class="hover:text-gray-900 transition">Terms</a>
+      </div>
+      <div class="flex items-center gap-3">
+        <a href="#start" class="btn-primary text-sm font-semibold px-5 py-2.5 rounded-lg shadow-sm">
+          Start Migration
+        </a>
+        <button aria-label="Toggle mobile menu" onclick="document.getElementById('mobile-nav').classList.toggle('open')" class="md:hidden p-2 text-gray-600 hover:text-gray-900">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+    </div>
+    <div id="mobile-nav" class="mobile-menu flex-col gap-2 px-6 pb-4 md:hidden text-sm font-medium text-gray-600">
+      <a href="#how-it-works" class="py-2 hover:text-gray-900 transition">How It Works</a>
+      <a href="#pricing" class="py-2 hover:text-gray-900 transition">Pricing</a>
+      <a href="#what-we-migrate" class="py-2 hover:text-gray-900 transition">What We Migrate</a>
+      <a href="#faq" class="py-2 hover:text-gray-900 transition">FAQ</a>
+      <a href="/terms.html" class="py-2 hover:text-gray-900 transition">Terms</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="bg-gradient-to-br from-indigo-50 via-white to-violet-50">
+    <div class="max-w-6xl mx-auto px-6 pt-24 pb-32 text-center">
+      <h1 class="text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-tight mb-6 text-gray-900">
+        Clone any blockchain<br>
+        <span class="text-indigo-600">to yours</span>
+      </h1>
+      <p class="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto mb-10 leading-relaxed">
+        Move contracts, state, and balances between EVM chains.
+        Read from Ethereum, Base, Polygon, Arbitrum, or Optimism &mdash;
+        deploy to any EVM chain. Done in minutes.
+      </p>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="#start" class="btn-primary text-base font-semibold px-8 py-3.5 rounded-xl shadow-md w-full sm:w-auto">
+          Start Your Migration &rarr;
+        </a>
+        <a href="#how-it-works" class="btn-outline text-base font-semibold px-8 py-3.5 rounded-xl w-full sm:w-auto">
+          How It Works
+        </a>
+      </div>
+      <p class="text-xs text-gray-500 mt-6">Free migration to L2aaS chains. Paid plans from $500 USDC.</p>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section id="how-it-works" class="py-24 border-t border-gray-100">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4 text-gray-900">How it works</h2>
+        <p class="text-gray-600 max-w-xl mx-auto">Three steps. No downtime on the source chain. No keys required.</p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="bg-white border border-gray-200 rounded-2xl p-8 shadow-sm hover:shadow-md transition">
+          <div class="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center mb-5">
+            <span class="text-indigo-600 font-bold text-xl">1</span>
+          </div>
+          <h3 class="text-lg font-semibold mb-2 text-gray-900">Tell us what to clone</h3>
+          <p class="text-gray-600 text-sm leading-relaxed">Provide the source chain and the contract addresses you want to migrate. We read everything on-chain &mdash; no access keys needed.</p>
+        </div>
+        <div class="bg-white border border-gray-200 rounded-2xl p-8 shadow-sm hover:shadow-md transition">
+          <div class="w-12 h-12 rounded-xl bg-violet-50 flex items-center justify-center mb-5">
+            <span class="text-violet-600 font-bold text-xl">2</span>
+          </div>
+          <h3 class="text-lg font-semibold mb-2 text-gray-900">Choose your destination</h3>
+          <p class="text-gray-600 text-sm leading-relaxed">Migrate to your L2aaS blockchain for free, or choose any EVM chain &mdash; Base, Polygon, Arbitrum, Ethereum &mdash; for a flat fee.</p>
+        </div>
+        <div class="bg-white border border-gray-200 rounded-2xl p-8 shadow-sm hover:shadow-md transition">
+          <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center mb-5">
+            <span class="text-emerald-600 font-bold text-xl">3</span>
+          </div>
+          <h3 class="text-lg font-semibold mb-2 text-gray-900">We deploy it &mdash; done</h3>
+          <p class="text-gray-600 text-sm leading-relaxed">We read the bytecode, storage state, and balances, then deploy everything on the destination chain. You get a full address mapping when it is complete.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section id="pricing" class="py-24 bg-gray-50 border-t border-gray-100">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Pricing</h2>
+        <p class="text-gray-600 max-w-xl mx-auto">Simple, transparent. Free for L2aaS customers. Flat-rate for everything else.</p>
+      </div>
+      <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        <!-- Free tier -->
+        <div class="bg-white border-2 border-indigo-200 rounded-2xl p-8 shadow-sm relative">
+          <div class="absolute -top-3 left-8">
+            <span class="bg-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">Free</span>
+          </div>
+          <h3 class="text-2xl font-bold mb-2 text-gray-900 mt-2">L2aaS Migration</h3>
+          <div class="text-4xl font-extrabold text-indigo-600 mb-4">$0</div>
+          <p class="text-gray-600 text-sm mb-6 leading-relaxed">Migrate any contracts and state to your L2aaS blockchain at no cost. A free onramp to get you building on your own chain.</p>
+          <ul class="space-y-3 text-sm text-gray-700 mb-8">
+            <li class="flex items-start gap-2">
+              <svg class="w-5 h-5 text-indigo-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              Contract bytecode and storage state
+            </li>
+            <li class="flex items-start gap-2">
+              <svg class="w-5 h-5 text-indigo-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              Account balances and token ownership
+            </li>
+            <li class="flex items-start gap-2">
+              <svg class="w-5 h-5 text-indigo-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              Full dependency graph analysis
+            </li>
+            <li class="flex items-start gap-2">
+              <svg class="w-5 h-5 text-indigo-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              Old-to-new address mapping report
+            </li>
+          </ul>
+          <a href="#start" class="btn-primary block text-center text-sm font-semibold px-6 py-3 rounded-lg shadow-sm">
+            Migrate Free
+          </a>
+        </div>
+        <!-- Paid tier -->
+        <div class="bg-white border border-gray-200 rounded-2xl p-8 shadow-sm">
+          <h3 class="text-2xl font-bold mb-2 text-gray-900 mt-2">Any EVM Chain</h3>
+          <div class="text-4xl font-extrabold text-gray-900 mb-1">From $500</div>
+          <p class="text-sm text-gray-500 mb-4">Paid in USDC</p>
+          <p class="text-gray-600 text-sm mb-6 leading-relaxed">Migrate to Base, Polygon, Arbitrum, Ethereum, or any EVM-compatible chain. Price depends on contract complexity.</p>
+          <ul class="space-y-3 text-sm text-gray-700 mb-8">
+            <li class="flex items-start gap-2">
+              <svg class="w-5 h-5 text-indigo-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              Everything in the free tier
+            </li>
+            <li class="flex items-start gap-2">
+              <svg class="w-5 h-5 text-indigo-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              Deploy to any EVM destination chain
+            </li>
+            <li class="flex items-start gap-2">
+              <svg class="w-5 h-5 text-indigo-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              Gas costs on destination chain included
+            </li>
+            <li class="flex items-start gap-2">
+              <svg class="w-5 h-5 text-indigo-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              Priority support and verification
+            </li>
+          </ul>
+          <a href="#start" class="btn-outline block text-center text-sm font-semibold px-6 py-3 rounded-lg">
+            Get a Quote
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- What We Migrate -->
+  <section id="what-we-migrate" class="py-24 border-t border-gray-100">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4 text-gray-900">What we migrate</h2>
+        <p class="text-gray-600 max-w-xl mx-auto">A complete snapshot of on-chain state, redeployed on your destination chain.</p>
+      </div>
+      <div class="grid md:grid-cols-2 gap-12 max-w-4xl mx-auto">
+        <!-- We DO migrate -->
+        <div>
+          <h3 class="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+            <svg class="w-6 h-6 text-emerald-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+            Included
+          </h3>
+          <ul class="space-y-4">
+            <li class="flex items-start gap-3">
+              <div class="w-2 h-2 rounded-full bg-emerald-400 mt-2 flex-shrink-0"></div>
+              <div>
+                <span class="font-semibold text-gray-900">Contract bytecode</span>
+                <p class="text-sm text-gray-600 mt-0.5">The compiled contract code, deployed as-is on the destination chain.</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <div class="w-2 h-2 rounded-full bg-emerald-400 mt-2 flex-shrink-0"></div>
+              <div>
+                <span class="font-semibold text-gray-900">Storage state</span>
+                <p class="text-sm text-gray-600 mt-0.5">All storage slots &mdash; mappings, arrays, variables &mdash; replicated exactly.</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <div class="w-2 h-2 rounded-full bg-emerald-400 mt-2 flex-shrink-0"></div>
+              <div>
+                <span class="font-semibold text-gray-900">Account balances</span>
+                <p class="text-sm text-gray-600 mt-0.5">Native token and ERC-20 balances for specified accounts.</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <div class="w-2 h-2 rounded-full bg-emerald-400 mt-2 flex-shrink-0"></div>
+              <div>
+                <span class="font-semibold text-gray-900">Token ownership</span>
+                <p class="text-sm text-gray-600 mt-0.5">ERC-721 and ERC-1155 ownership records, fully reconstructed.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <!-- We DON'T migrate -->
+        <div>
+          <h3 class="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+            <svg class="w-6 h-6 text-red-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+            Not included
+          </h3>
+          <ul class="space-y-4">
+            <li class="flex items-start gap-3">
+              <div class="w-2 h-2 rounded-full bg-red-300 mt-2 flex-shrink-0"></div>
+              <div>
+                <span class="font-semibold text-gray-900">Transaction history</span>
+                <p class="text-sm text-gray-600 mt-0.5">Past transactions cannot be replayed on a different chain. This is a fundamental blockchain constraint.</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <div class="w-2 h-2 rounded-full bg-red-300 mt-2 flex-shrink-0"></div>
+              <div>
+                <span class="font-semibold text-gray-900">External dependencies</span>
+                <p class="text-sm text-gray-600 mt-0.5">Oracles, bridges, and off-chain services that the contract relies on must be configured separately on the destination chain.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Supported Chains -->
+  <section class="py-24 bg-gray-50 border-t border-gray-100">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Supported chains</h2>
+        <p class="text-gray-600 max-w-xl mx-auto">Read from any of these. Write to any of these. Mix and match.</p>
+      </div>
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6 max-w-4xl mx-auto">
+        <div class="bg-white border border-gray-200 rounded-xl p-6 text-center shadow-sm hover:shadow-md transition">
+          <div class="text-2xl font-bold text-gray-900 mb-1">Ethereum</div>
+          <div class="text-xs text-gray-500">Mainnet</div>
+        </div>
+        <div class="bg-white border border-gray-200 rounded-xl p-6 text-center shadow-sm hover:shadow-md transition">
+          <div class="text-2xl font-bold text-gray-900 mb-1">Base</div>
+          <div class="text-xs text-gray-500">Coinbase L2</div>
+        </div>
+        <div class="bg-white border border-gray-200 rounded-xl p-6 text-center shadow-sm hover:shadow-md transition">
+          <div class="text-2xl font-bold text-gray-900 mb-1">Optimism</div>
+          <div class="text-xs text-gray-500">OP Mainnet</div>
+        </div>
+        <div class="bg-white border border-gray-200 rounded-xl p-6 text-center shadow-sm hover:shadow-md transition">
+          <div class="text-2xl font-bold text-gray-900 mb-1">Arbitrum</div>
+          <div class="text-xs text-gray-500">Arbitrum One</div>
+        </div>
+        <div class="bg-white border border-gray-200 rounded-xl p-6 text-center shadow-sm hover:shadow-md transition">
+          <div class="text-2xl font-bold text-gray-900 mb-1">Polygon</div>
+          <div class="text-xs text-gray-500">PoS Chain</div>
+        </div>
+      </div>
+      <p class="text-center text-sm text-gray-500 mt-8">Plus any EVM-compatible chain with a public RPC endpoint.</p>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="py-24 border-t border-gray-100">
+    <div class="max-w-3xl mx-auto px-6">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Frequently asked questions</h2>
+      </div>
+      <div class="space-y-4">
+        <!-- FAQ 1 -->
+        <div class="border border-gray-200 rounded-xl overflow-hidden">
+          <button class="faq-toggle w-full text-left px-6 py-5 flex items-center justify-between bg-white hover:bg-gray-50 transition" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open')">
+            <span class="font-semibold text-gray-900">Is this legal?</span>
+            <svg class="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer px-6 bg-white">
+            <p class="pb-5 text-gray-600 text-sm leading-relaxed">Yes. All blockchain data is public by design. We read publicly available on-chain state &mdash; contract bytecode, storage slots, and account balances. No private data is accessed, and no authentication to the source chain is required.</p>
+          </div>
+        </div>
+        <!-- FAQ 2 -->
+        <div class="border border-gray-200 rounded-xl overflow-hidden">
+          <button class="faq-toggle w-full text-left px-6 py-5 flex items-center justify-between bg-white hover:bg-gray-50 transition" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open')">
+            <span class="font-semibold text-gray-900">Will contract addresses change?</span>
+            <svg class="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer px-6 bg-white">
+            <p class="pb-5 text-gray-600 text-sm leading-relaxed">Yes. Contracts are deployed fresh on the destination chain, so they receive new addresses. We provide a complete mapping of source addresses to destination addresses after migration is complete.</p>
+          </div>
+        </div>
+        <!-- FAQ 3 -->
+        <div class="border border-gray-200 rounded-xl overflow-hidden">
+          <button class="faq-toggle w-full text-left px-6 py-5 flex items-center justify-between bg-white hover:bg-gray-50 transition" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open')">
+            <span class="font-semibold text-gray-900">How long does it take?</span>
+            <svg class="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer px-6 bg-white">
+            <p class="pb-5 text-gray-600 text-sm leading-relaxed">Minutes for simple contracts. A few hours for complex deployments with many interdependent contracts and large storage footprints. We provide real-time progress updates throughout the migration.</p>
+          </div>
+        </div>
+        <!-- FAQ 4 -->
+        <div class="border border-gray-200 rounded-xl overflow-hidden">
+          <button class="faq-toggle w-full text-left px-6 py-5 flex items-center justify-between bg-white hover:bg-gray-50 transition" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open')">
+            <span class="font-semibold text-gray-900">What about contract dependencies?</span>
+            <svg class="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer px-6 bg-white">
+            <p class="pb-5 text-gray-600 text-sm leading-relaxed">Contracts that reference other contracts need all dependencies migrated together. We analyze the full dependency graph before migration begins and deploy everything in the correct order, updating internal references to point to the new addresses.</p>
+          </div>
+        </div>
+        <!-- FAQ 5 -->
+        <div class="border border-gray-200 rounded-xl overflow-hidden">
+          <button class="faq-toggle w-full text-left px-6 py-5 flex items-center justify-between bg-white hover:bg-gray-50 transition" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open')">
+            <span class="font-semibold text-gray-900">How do I pay?</span>
+            <svg class="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer px-6 bg-white">
+            <p class="pb-5 text-gray-600 text-sm leading-relaxed">Paid migrations are invoiced in USDC. You receive a quote based on contract complexity, approve it, and send payment. Migration begins after payment is confirmed on-chain. L2aaS migrations are completely free.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="start" class="py-24 bg-gradient-to-br from-indigo-50 via-white to-violet-50 border-t border-gray-100">
+    <div class="max-w-3xl mx-auto px-6 text-center">
+      <h2 class="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Start your migration</h2>
+      <p class="text-gray-600 text-lg mb-10 leading-relaxed">
+        Tell us the source chain and contract addresses. We will analyze the migration scope and get back to you with a plan.
+      </p>
+      <a href="mailto:migrate@chainclone.net" class="btn-primary inline-block text-base font-semibold px-10 py-4 rounded-xl shadow-md">
+        Contact Us to Begin &rarr;
+      </a>
+      <p class="text-xs text-gray-500 mt-6">migrate@chainclone.net &mdash; we typically respond within a few hours.</p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="border-t border-gray-200 py-8 bg-white">
+    <div class="max-w-6xl mx-auto px-6 flex items-center justify-between">
+      <div class="text-sm text-gray-500">&copy; 2026 ChainClone</div>
+      <a href="/terms.html" class="text-sm text-gray-500 hover:text-gray-700 transition">Terms</a>
+    </div>
+  </footer>
+
+</body>
+</html>
