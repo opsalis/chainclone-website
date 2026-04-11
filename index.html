@@ -133,6 +133,9 @@
         <a href="/terms.html" class="hover:text-gray-900 transition">Terms</a>
       </div>
       <div class="flex items-center gap-3">
+        <button id="navConnectBtn" onclick="connectWallet()" class="text-sm font-semibold px-4 py-2 rounded-lg border-2 border-indigo-600 text-indigo-600 hover:bg-indigo-50 transition">
+          Connect Wallet
+        </button>
         <a href="#start" class="btn-primary text-sm font-semibold px-5 py-2.5 rounded-lg shadow-sm">
           Start Migration
         </a>
@@ -453,27 +456,67 @@
     </div>
   </section>
 
-  <!-- CTA -->
+  <!-- CTA / Start -->
   <section id="start" class="py-24 bg-gradient-to-br from-indigo-50 via-white to-violet-50 border-t border-gray-100">
     <div class="max-w-3xl mx-auto px-6 text-center">
       <h2 class="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Start your migration</h2>
-      <p class="text-gray-600 text-lg mb-10 leading-relaxed">
-        Tell us the source chain and contract addresses. We will analyze the migration scope and get back to you with a plan.
+      <p class="text-gray-600 text-lg mb-6 leading-relaxed">
+        Connect your wallet, enter the source chain and contract addresses, and download your encrypted .l2aas file.
       </p>
-      <a href="mailto:migrate@chainclone.net" class="btn-primary inline-block text-base font-semibold px-10 py-4 rounded-xl shadow-md">
-        Contact Us to Begin &rarr;
-      </a>
-      <p class="text-xs text-gray-500 mt-4">Visa and Mastercard accepted &mdash; no crypto wallet needed.</p>
-      <p class="text-xs text-gray-500 mt-2">migrate@chainclone.net &mdash; we typically respond within a few hours.</p>
+      <p class="text-sm text-gray-500 mb-10">Your wallet is your identity &mdash; no accounts needed. Sign with MetaMask, Coinbase Wallet, or any Web3 wallet.</p>
 
-      <!-- Coupon code input -->
-      <div class="mt-10 max-w-md mx-auto text-left">
-        <label class="text-sm text-gray-500">Have a coupon code? (L2aaS customers get free extraction)</label>
-        <div class="flex gap-2 mt-2">
-          <input type="text" id="couponInput" placeholder="Enter coupon code" class="flex-1 border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
-          <button onclick="validateCoupon()" class="btn-primary text-sm font-semibold px-5 py-2.5 rounded-lg shadow-sm">Apply</button>
+      <div class="max-w-lg mx-auto text-left">
+        <!-- Wallet connect -->
+        <div class="bg-white border border-gray-200 rounded-xl p-6 mb-6 shadow-sm">
+          <div class="flex items-center justify-between mb-3">
+            <label class="text-sm font-semibold text-gray-900">1. Connect your wallet</label>
+            <span id="walletStatus" class="text-xs text-gray-400"></span>
+          </div>
+          <button id="connectBtn" onclick="connectWallet()" class="btn-primary w-full text-sm font-semibold px-6 py-3 rounded-lg shadow-sm">
+            Connect Wallet
+          </button>
         </div>
-        <p id="couponResult" class="text-sm mt-2"></p>
+
+        <!-- Source chain -->
+        <div class="bg-white border border-gray-200 rounded-xl p-6 mb-6 shadow-sm">
+          <label class="block text-sm font-semibold text-gray-900 mb-2">2. Source chain</label>
+          <select id="sourceChain" class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+            <option value="ethereum">Ethereum Mainnet</option>
+            <option value="base">Base</option>
+            <option value="optimism">Optimism</option>
+            <option value="arbitrum">Arbitrum One</option>
+            <option value="polygon">Polygon PoS</option>
+          </select>
+        </div>
+
+        <!-- Contract addresses -->
+        <div class="bg-white border border-gray-200 rounded-xl p-6 mb-6 shadow-sm">
+          <label class="block text-sm font-semibold text-gray-900 mb-2">3. Contract addresses (one per line)</label>
+          <textarea id="contractAddresses" rows="4" placeholder="0x1234...&#10;0x5678..." class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 resize-vertical"></textarea>
+        </div>
+
+        <!-- Coupon code -->
+        <div class="bg-white border border-gray-200 rounded-xl p-6 mb-6 shadow-sm">
+          <label class="block text-sm font-semibold text-gray-900 mb-2">4. Coupon code</label>
+          <div class="flex gap-2">
+            <input type="text" id="couponInput" placeholder="Enter coupon code" class="flex-1 border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+            <button onclick="validateCoupon()" class="btn-primary text-sm font-semibold px-5 py-2.5 rounded-lg shadow-sm">Apply</button>
+          </div>
+          <p id="couponResult" class="text-sm mt-2"></p>
+          <p class="text-xs text-gray-400 mt-1">L2aaS customers: enter <code class="bg-gray-100 px-1 py-0.5 rounded font-mono">l2aas</code> for free extraction</p>
+        </div>
+
+        <!-- Extract button -->
+        <button id="extractBtn" onclick="extractFree()" disabled class="btn-primary w-full text-base font-semibold px-6 py-4 rounded-xl shadow-md opacity-50 cursor-not-allowed">
+          Extract &amp; Download .l2aas File
+        </button>
+        <p id="extractStatus" class="text-sm mt-3 text-center"></p>
+        <p class="text-xs text-gray-500 mt-4 text-center">File is encrypted to your wallet &mdash; only you can import it on <a href="https://l2aas.net" class="text-indigo-600 underline">L2aaS</a>.</p>
+      </div>
+
+      <div class="mt-10 pt-8 border-t border-gray-200">
+        <p class="text-sm text-gray-500">Need a paid migration to another EVM chain?</p>
+        <a href="mailto:migrate@chainclone.net" class="text-sm text-indigo-600 font-semibold hover:underline">migrate@chainclone.net</a>
       </div>
     </div>
   </section>
@@ -497,22 +540,66 @@
     </div>
   </footer>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.4/ethers.umd.min.js"></script>
   <script>
-    // FAQ toggle
-    document.querySelectorAll('.faq-toggle').forEach(btn => {
-      btn.addEventListener('click', function() {
-        // handled by inline onclick
-      });
-    });
+    // --- Wallet state ---
+    let connectedWallet = null;
+    let walletAddress = null;
+    let couponValid = false;
+
+    async function connectWallet() {
+      if (!window.ethereum) {
+        alert('Please install MetaMask or another Web3 wallet to continue.');
+        return;
+      }
+      try {
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        const signer = await provider.getSigner();
+        walletAddress = await signer.getAddress();
+
+        // Sign message to prove ownership (SIWE-style)
+        const message = 'ChainClone: I authorize blockchain data extraction.\nWallet: ' + walletAddress + '\nTimestamp: ' + Date.now();
+        const signature = await signer.signMessage(message);
+
+        connectedWallet = { address: walletAddress, signature: signature, message: message };
+
+        // Update UI
+        const short = walletAddress.slice(0, 6) + '...' + walletAddress.slice(-4);
+        document.getElementById('walletStatus').textContent = 'Connected: ' + short;
+        document.getElementById('walletStatus').className = 'text-xs text-green-600 font-medium';
+        document.getElementById('connectBtn').textContent = 'Connected: ' + short;
+        document.getElementById('connectBtn').classList.remove('btn-primary');
+        document.getElementById('connectBtn').classList.add('bg-green-600', 'text-white', 'hover:bg-green-700');
+        document.getElementById('navConnectBtn').textContent = short;
+        document.getElementById('navConnectBtn').classList.remove('border-indigo-600', 'text-indigo-600');
+        document.getElementById('navConnectBtn').classList.add('border-green-600', 'text-green-600');
+        updateExtractButton();
+      } catch (err) {
+        console.error('Wallet connect failed:', err);
+        alert('Wallet connection failed: ' + (err.message || err));
+      }
+    }
+
+    function updateExtractButton() {
+      const btn = document.getElementById('extractBtn');
+      if (connectedWallet && couponValid) {
+        btn.disabled = false;
+        btn.classList.remove('opacity-50', 'cursor-not-allowed');
+      } else {
+        btn.disabled = true;
+        btn.classList.add('opacity-50', 'cursor-not-allowed');
+      }
+    }
 
     // Coupon validation
     function validateCoupon() {
       const code = document.getElementById('couponInput').value.trim().toLowerCase();
       const result = document.getElementById('couponResult');
       if (code === 'l2aas') {
-        result.textContent = 'Coupon applied! Free extraction — output as encrypted .l2aas file for import into L2aaS.';
+        couponValid = true;
+        result.textContent = 'Coupon applied! Free extraction as encrypted .l2aas file.';
         result.className = 'text-sm mt-2 text-green-600 font-medium';
-        // Update pricing display — mark L2aaS tier as active
+        // Update pricing display
         const freeTier = document.querySelector('#pricing .border-indigo-200');
         if (freeTier) {
           freeTier.classList.add('ring-2', 'ring-green-500');
@@ -524,11 +611,65 @@
           }
         }
       } else if (code === '') {
+        couponValid = false;
         result.textContent = '';
         result.className = 'text-sm mt-2';
       } else {
+        couponValid = false;
         result.textContent = 'Invalid coupon code.';
         result.className = 'text-sm mt-2 text-red-600';
+      }
+      updateExtractButton();
+    }
+
+    // Free extraction — wallet-authenticated, ECDH-encrypted
+    async function extractFree() {
+      if (!connectedWallet) { alert('Connect your wallet first.'); return; }
+      if (!couponValid) { alert('Enter a valid coupon code.'); return; }
+
+      const chain = document.getElementById('sourceChain').value;
+      const addrsRaw = document.getElementById('contractAddresses').value;
+      const addrs = addrsRaw.split('\n').map(function(a) { return a.trim(); }).filter(function(a) { return a.length > 0; });
+
+      if (addrs.length === 0) { alert('Enter at least one contract address.'); return; }
+
+      const coupon = document.getElementById('couponInput').value.trim();
+      const statusEl = document.getElementById('extractStatus');
+      statusEl.textContent = 'Extracting and encrypting... this may take a moment.';
+      statusEl.className = 'text-sm mt-3 text-center text-amber-600';
+
+      try {
+        const resp = await fetch('/api/extract-free', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            sourceChain: chain,
+            addresses: addrs,
+            couponCode: coupon,
+            walletAddress: connectedWallet.address,
+            signature: connectedWallet.signature,
+            message: connectedWallet.message,
+          }),
+        });
+
+        if (resp.ok) {
+          const blob = await resp.blob();
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'chainclone-export-' + Date.now() + '.l2aas';
+          a.click();
+          URL.revokeObjectURL(url);
+          statusEl.textContent = 'Download started! Import this file at l2aas.net/data.html';
+          statusEl.className = 'text-sm mt-3 text-center text-green-600 font-medium';
+        } else {
+          const err = await resp.json();
+          statusEl.textContent = err.error || 'Extraction failed.';
+          statusEl.className = 'text-sm mt-3 text-center text-red-600';
+        }
+      } catch (err) {
+        statusEl.textContent = 'Network error: ' + (err.message || err);
+        statusEl.className = 'text-sm mt-3 text-center text-red-600';
       }
     }
 
