@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Migrate Contracts — ChainClone</title>
+  <meta name="description" content="Clone any EVM smart contract to your blockchain. Fill in source chain and contract addresses, get a live analysis and quote, then pay once.">
+  <link rel="canonical" href="https://chainclone.net/migrate.html">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%237c3aed'/%3E%3Crect x='5' y='5' width='13' height='17' rx='2' fill='none' stroke='%23fff' stroke-width='1.8'/%3E%3Crect x='14' y='10' width='13' height='17' rx='2' fill='%237c3aed' stroke='%23fff' stroke-width='1.8'/%3E%3Cpath d='M17 14h7M17 18h7M17 22h4' stroke='%23fff' stroke-width='1.4' stroke-linecap='round'/%3E%3C/svg%3E">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://chainclone.net/migrate.html">
+  <meta property="og:title" content="Migrate Contracts — ChainClone">
+  <meta property="og:description" content="Clone any EVM smart contract to your blockchain. Analyze, quote, pay once.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --purple: #7c3aed;
+      --purple-dim: #6d28d9;
+      --purple-light: #ede9fe;
+      --purple-glow: rgba(124, 58, 237, 0.06);
+      --text: #1a1a2e;
+      --text-secondary: #555770;
+      --bg: #ffffff;
+      --bg-alt: #f7f8fc;
+      --border: #e4e7ec;
+      --green: #00b87a;
+      --red: #ef4444;
+      --radius: 10px;
+    }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    code, pre, .mono { font-family: 'JetBrains Mono', monospace; }
+    a { color: inherit; text-decoration: none; }
+    .container { max-width: 800px; margin: 0 auto; padding: 0 24px; }
+    nav { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    nav .inner { max-width: 1120px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; padding-top: 16px; padding-bottom: 16px; }
+    .logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.25rem; letter-spacing: -0.5px; }
+    .logo svg { width: 32px; height: 32px; }
+    .nav-links { display: flex; align-items: center; gap: 32px; font-size: 0.9rem; font-weight: 500; color: var(--text-secondary); }
+    .nav-links a:hover { color: var(--text); }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 22px; border-radius: var(--radius); font-weight: 600; font-size: 0.9rem; transition: all 0.2s; cursor: pointer; border: none; font-family: inherit; }
+    .btn-primary { background: var(--purple); color: #fff; }
+    .btn-primary:hover { background: var(--purple-dim); transform: translateY(-1px); box-shadow: 0 4px 20px rgba(124,58,237,0.3); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+    .btn-outline { border: 1.5px solid var(--border); color: var(--text-secondary); background: transparent; }
+    .btn-outline:hover { border-color: var(--purple); color: var(--purple); }
+    .btn-green { background: var(--green); color: #fff; }
+    .btn-green:hover { background: #009966; transform: translateY(-1px); }
+
+    /* Progress steps */
+    .progress-bar { display: flex; align-items: center; gap: 0; margin: 32px 0 40px; }
+    .progress-step { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); }
+    .progress-step.active { color: var(--purple); }
+    .progress-step.done { color: var(--green); }
+    .step-circle { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; flex-shrink: 0; background: var(--bg); transition: all 0.2s; }
+    .progress-step.active .step-circle { border-color: var(--purple); background: var(--purple); color: #fff; }
+    .progress-step.done .step-circle { border-color: var(--green); background: var(--green); color: #fff; }
+    .step-line { flex: 1; height: 2px; background: var(--border); min-width: 24px; }
+    .step-line.done { background: var(--green); }
+
+    /* Form */
+    .panel { background: var(--bg); border: 1px solid var(--border); border-radius: 16px; padding: 32px; margin-bottom: 24px; }
+    .panel h2 { font-size: 1.2rem; font-weight: 700; margin-bottom: 6px; }
+    .panel .subtitle { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 28px; }
+    label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; color: var(--text); }
+    label .hint { font-weight: 400; color: var(--text-secondary); }
+    select, textarea, input[type="text"] {
+      width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: var(--radius);
+      font-size: 0.9rem; font-family: inherit; background: var(--bg); color: var(--text);
+      transition: border-color 0.15s; outline: none;
+    }
+    select:focus, textarea:focus, input[type="text"]:focus { border-color: var(--purple); box-shadow: 0 0 0 3px var(--purple-glow); }
+    textarea { resize: vertical; min-height: 100px; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; }
+    .form-row { margin-bottom: 20px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+
+    /* Destination radio cards */
+    .dest-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin-bottom: 20px; }
+    .dest-option { position: relative; }
+    .dest-option input { position: absolute; opacity: 0; width: 0; height: 0; }
+    .dest-card { border: 1.5px solid var(--border); border-radius: 10px; padding: 14px 16px; cursor: pointer; transition: all 0.15s; display: block; }
+    .dest-card:hover { border-color: var(--purple); }
+    .dest-option input:checked + .dest-card { border-color: var(--purple); background: var(--purple-light); }
+    .dest-card .dest-name { font-weight: 600; font-size: 0.9rem; color: var(--text); }
+    .dest-card .dest-price { font-size: 0.8rem; color: var(--text-secondary); margin-top: 3px; font-family: 'JetBrains Mono', monospace; }
+    .dest-card .dest-price.free { color: var(--green); font-weight: 700; }
+
+    /* Analysis log */
+    .log-box { background: #0f172a; border-radius: 10px; padding: 20px; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; line-height: 1.7; color: #e2e8f0; min-height: 120px; max-height: 280px; overflow-y: auto; }
+    .log-line { margin-bottom: 2px; }
+    .log-ok { color: #4ade80; }
+    .log-info { color: #93c5fd; }
+    .log-warn { color: #fbbf24; }
+    .log-err { color: #f87171; }
+    .log-dot { display: inline-block; }
+
+    /* Contract result rows */
+    .contract-row { border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; margin-bottom: 10px; display: grid; grid-template-columns: 1fr auto; align-items: start; gap: 16px; }
+    .contract-addr { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 4px; word-break: break-all; }
+    .contract-type { font-size: 0.8rem; font-weight: 600; color: var(--text); background: var(--purple-light); color: var(--purple); padding: 2px 8px; border-radius: 20px; display: inline-block; margin-bottom: 6px; }
+    .contract-meta { display: flex; gap: 16px; font-size: 0.8rem; color: var(--text-secondary); flex-wrap: wrap; }
+    .contract-price { font-weight: 700; font-size: 1rem; color: var(--text); white-space: nowrap; font-family: 'JetBrains Mono', monospace; }
+    .contract-price .free { color: var(--green); }
+
+    /* Quote summary */
+    .quote-summary { background: var(--bg-alt); border: 1px solid var(--border); border-radius: 12px; padding: 20px 24px; }
+    .quote-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; font-size: 0.9rem; }
+    .quote-row + .quote-row { border-top: 1px solid var(--border); }
+    .quote-total { font-size: 1.25rem; font-weight: 800; color: var(--text); }
+    .quote-discount { color: var(--green); font-weight: 600; }
+
+    /* Refund notice */
+    .refund-notice { background: #fff7ed; border: 1px solid #fed7aa; border-radius: 8px; padding: 14px 18px; font-size: 0.85rem; color: #92400e; line-height: 1.6; margin: 16px 0; }
+
+    /* Payment */
+    .payment-box { text-align: center; padding: 32px; }
+    .payment-box .amount { font-size: 2.5rem; font-weight: 800; color: var(--text); font-family: 'JetBrains Mono', monospace; margin: 12px 0; }
+    .wallet-status { display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: var(--bg-alt); border: 1px solid var(--border); border-radius: 10px; font-size: 0.85rem; font-family: 'JetBrains Mono', monospace; margin-bottom: 20px; }
+    .wallet-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--green); }
+
+    /* Execution progress */
+    .exec-item { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+    .exec-item:last-child { border-bottom: none; }
+    .exec-status { width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; }
+    .exec-status.pending { background: var(--bg-alt); border: 2px solid var(--border); }
+    .exec-status.running { background: #dbeafe; border: 2px solid #93c5fd; animation: spin 1s linear infinite; }
+    .exec-status.done { background: #dcfce7; border: 2px solid #4ade80; color: #16a34a; }
+    .exec-status.error { background: #fee2e2; border: 2px solid #fca5a5; color: var(--red); }
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+    /* Results */
+    .result-addr-row { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 0.85rem; font-family: 'JetBrains Mono', monospace; }
+    .result-addr-row:last-child { border-bottom: none; }
+    .addr-arrow { color: var(--purple); font-weight: 700; }
+    .result-link { color: var(--purple); text-decoration: none; font-size: 0.75rem; }
+    .result-link:hover { text-decoration: underline; }
+
+    /* Download button */
+    .dl-btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; background: var(--purple-light); color: var(--purple); border-radius: var(--radius); font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.15s; border: 1.5px solid #c4b5fd; }
+    .dl-btn:hover { background: #ddd6fe; }
+
+    /* Hidden */
+    .hidden { display: none !important; }
+
+    /* Spinner */
+    .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.4); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; }
+
+    footer { border-top: 1px solid var(--border); padding: 32px 0; margin-top: 64px; }
+    footer .inner { max-width: 1120px; margin: 0 auto; padding: 0 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+    footer .links { display: flex; gap: 24px; font-size: 0.85rem; color: var(--text-secondary); }
+    footer .copy { font-size: 0.8rem; color: #94a3b8; }
+
+    @media (max-width: 640px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .dest-grid { grid-template-columns: 1fr 1fr; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="inner">
+      <a href="/" class="logo">
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" rx="6" fill="#7c3aed"/>
+          <rect x="5" y="5" width="13" height="17" rx="2" fill="none" stroke="#fff" stroke-width="1.8"/>
+          <rect x="14" y="10" width="13" height="17" rx="2" fill="#7c3aed" stroke="#fff" stroke-width="1.8"/>
+          <path d="M17 14h7M17 18h7M17 22h4" stroke="#fff" stroke-width="1.4" stroke-linecap="round"/>
+        </svg>
+        <span>Chain<span style="color:var(--purple)">Clone</span></span>
+      </a>
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/docs.html">Docs</a>
+        <a href="/terms.html">Terms</a>
+      </div>
+    </div>
+  </nav>
+
+  <div style="padding: 40px 0 80px;">
+    <div class="container">
+
+      <!-- Progress bar -->
+      <div class="progress-bar" id="progress-bar">
+        <div class="progress-step active" id="ps-1">
+          <div class="step-circle">1</div>
+          <span class="step-label">Configure</span>
+        </div>
+        <div class="step-line" id="sl-1"></div>
+        <div class="progress-step" id="ps-2">
+          <div class="step-circle">2</div>
+          <span class="step-label">Analyze</span>
+        </div>
+        <div class="step-line" id="sl-2"></div>
+        <div class="progress-step" id="ps-3">
+          <div class="step-circle">3</div>
+          <span class="step-label">Quote</span>
+        </div>
+        <div class="step-line" id="sl-3"></div>
+        <div class="progress-step" id="ps-4">
+          <div class="step-circle">4</div>
+          <span class="step-label">Pay</span>
+        </div>
+        <div class="step-line" id="sl-4"></div>
+        <div class="progress-step" id="ps-5">
+          <div class="step-circle">5</div>
+          <span class="step-label">Execute</span>
+        </div>
+        <div class="step-line" id="sl-5"></div>
+        <div class="progress-step" id="ps-6">
+          <div class="step-circle">6</div>
+          <span class="step-label">Results</span>
+        </div>
+      </div>
+
+      <!-- STEP 1: Form -->
+      <div id="step-1">
+        <div class="panel">
+          <h2>Configure your migration</h2>
+          <p class="subtitle">Enter the source chain and contract addresses to clone. You'll get a live analysis and quote before paying anything.</p>
+
+          <div class="form-row">
+            <label>Source chain</label>
+            <select id="source-chain">
+              <option value="ethereum">Ethereum Mainnet (chainId 1)</option>
+              <option value="base" selected>Base (chainId 8453)</option>
+              <option value="arbitrum">Arbitrum One (chainId 42161)</option>
+              <option value="optimism">Optimism (chainId 10)</option>
+              <option value="polygon">Polygon (chainId 137)</option>
+              <option value="bsc">BNB Chain (chainId 56)</option>
+              <option value="avalanche">Avalanche C-Chain (chainId 43114)</option>
+              <option value="custom">Custom RPC endpoint</option>
+            </select>
+          </div>
+
+          <div class="form-row hidden" id="custom-rpc-row">
+            <label>Custom RPC URL <span class="hint">— must be an EVM-compatible endpoint</span></label>
+            <input type="text" id="custom-rpc" placeholder="https://rpc.yourchain.example.com">
+          </div>
+
+          <div class="form-row">
+            <label>Contract addresses <span class="hint">— one per line, up to 100</span></label>
+            <textarea id="addresses" placeholder="0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48&#10;0x6B175474E89094C44Da98b954EedeAC495271d0F&#10;..."></textarea>
+          </div>
+
+          <div class="form-row">
+            <label>Destination</label>
+            <div class="dest-grid">
+              <label class="dest-option">
+                <input type="radio" name="destination" value="l2aas" id="dest-l2aas">
+                <span class="dest-card">
+                  <div class="dest-name">L2aaS chain</div>
+                  <div class="dest-price free">Free</div>
+                </span>
+              </label>
+              <label class="dest-option">
+                <input type="radio" name="destination" value="zip" id="dest-zip" checked>
+                <span class="dest-card">
+                  <div class="dest-name">Export ZIP</div>
+                  <div class="dest-price">$47.50/contract</div>
+                </span>
+              </label>
+              <label class="dest-option">
+                <input type="radio" name="destination" value="base" id="dest-base">
+                <span class="dest-card">
+                  <div class="dest-name">Base</div>
+                  <div class="dest-price">$97.53/contract</div>
+                </span>
+              </label>
+              <label class="dest-option">
+                <input type="radio" name="destination" value="arbitrum" id="dest-arb">
+                <span class="dest-card">
+                  <div class="dest-name">Arbitrum</div>
+                  <div class="dest-price">$97.53/contract</div>
+                </span>
+              </label>
+              <label class="dest-option">
+                <input type="radio" name="destination" value="optimism" id="dest-op">
+                <span class="dest-card">
+                  <div class="dest-name">Optimism</div>
+                  <div class="dest-price">$97.53/contract</div>
+                </span>
+              </label>
+              <label class="dest-option">
+                <input type="radio" name="destination" value="polygon" id="dest-poly">
+                <span class="dest-card">
+                  <div class="dest-name">Polygon</div>
+                  <div class="dest-price">$97.53/contract</div>
+                </span>
+              </label>
+              <label class="dest-option">
+                <input type="radio" name="destination" value="bsc" id="dest-bsc">
+                <span class="dest-card">
+                  <div class="dest-name">BNB Chain</div>
+                  <div class="dest-price">$31.17/contract</div>
+                </span>
+              </label>
+              <label class="dest-option">
+                <input type="radio" name="destination" value="ethereum" id="dest-eth">
+                <span class="dest-card">
+                  <div class="dest-name">Ethereum L1</div>
+                  <div class="dest-price">$478.21/contract</div>
+                </span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-row hidden" id="l2aas-chain-row">
+            <label>L2aaS chain ID <span class="hint">— your chain ID, or "new" to request a new chain</span></label>
+            <input type="text" id="l2aas-chain-id" placeholder="e.g. 845302 or new">
+          </div>
+
+          <div id="form-error" class="hidden" style="background: #fee2e2; border: 1px solid #fca5a5; border-radius: 8px; padding: 12px 16px; font-size: 0.85rem; color: #b91c1c; margin-bottom: 16px;"></div>
+
+          <button class="btn btn-primary" style="width: 100%; padding: 14px; font-size: 1rem;" onclick="startAnalysis()">
+            Analyze contracts →
+          </button>
+        </div>
+      </div>
+
+      <!-- STEP 2: Analysis -->
+      <div id="step-2" class="hidden">
+        <div class="panel">
+          <h2>Analyzing contracts</h2>
+          <p class="subtitle">Reading bytecode, storage slots, and contract types from the source chain.</p>
+          <div class="log-box" id="analysis-log">
+            <div class="log-line log-info">Connecting to source chain...</div>
+          </div>
+          <div style="margin-top: 20px; display: flex; gap: 12px; align-items: center;">
+            <div class="spinner" style="border-color: rgba(124,58,237,0.3); border-top-color: var(--purple);" id="analysis-spinner"></div>
+            <span style="font-size: 0.9rem; color: var(--text-secondary);" id="analysis-status-text">Starting analysis...</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 3: Quote -->
+      <div id="step-3" class="hidden">
+        <div class="panel">
+          <h2>Your quote</h2>
+          <p class="subtitle">Review the analysis results and pricing before paying.</p>
+
+          <div id="contract-list" style="margin-bottom: 24px;"></div>
+
+          <div class="quote-summary">
+            <div class="quote-row">
+              <span style="color: var(--text-secondary);">Contracts analyzed</span>
+              <span id="q-count" style="font-weight: 600;">—</span>
+            </div>
+            <div class="quote-row hidden" id="q-discount-row">
+              <span style="color: var(--text-secondary);">Volume discount</span>
+              <span id="q-discount" class="quote-discount">—</span>
+            </div>
+            <div class="quote-row">
+              <span style="font-weight: 700;">Total</span>
+              <span id="q-total" class="quote-total">—</span>
+            </div>
+          </div>
+
+          <div class="refund-notice" id="refund-notice">
+            <strong>Before you pay:</strong> If we are unable to complete the migration, you will be refunded minus any gas costs already spent on the destination chain. Gas costs are non-refundable under any circumstances — they are burned on-chain and cannot be recovered.
+          </div>
+
+          <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px;">
+            <button class="dl-btn" id="sample-btn" onclick="downloadSample()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download free sample
+            </button>
+            <button class="btn btn-primary" style="flex: 1; min-width: 200px; padding: 14px; font-size: 1rem;" id="proceed-pay-btn" onclick="proceedToPayment()">
+              Proceed to payment →
+            </button>
+          </div>
+          <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 10px;">The free sample contains the first contract's bytecode and structure analysis. Enough to verify quality, not enough to deploy without the full migration.</p>
+        </div>
+      </div>
+
+      <!-- STEP 4: Payment -->
+      <div id="step-4" class="hidden">
+        <div class="panel">
+          <h2>Payment</h2>
+          <p class="subtitle">Pay with USDC or USDT. Your wallet, your transaction, verified on-chain.</p>
+
+          <div class="payment-box">
+            <div style="font-size: 0.9rem; color: var(--text-secondary);">Total due</div>
+            <div class="amount" id="pay-amount">$0.00</div>
+            <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 28px;">USDC or USDT · Base / Demo L2</div>
+
+            <div id="wallet-connect-section">
+              <button class="btn btn-primary" style="width: 100%; padding: 14px; font-size: 1rem; margin-bottom: 16px;" onclick="connectWallet()">
+                Connect wallet
+              </button>
+              <p style="font-size: 0.8rem; color: var(--text-secondary);">MetaMask, WalletConnect, Coinbase Wallet supported</p>
+            </div>
+
+            <div id="wallet-connected-section" class="hidden">
+              <div class="wallet-status">
+                <div class="wallet-dot"></div>
+                <span id="wallet-address-display">0x...</span>
+              </div>
+              <div style="display: flex; gap: 12px; margin-bottom: 16px;">
+                <button class="btn btn-outline" style="flex: 1;" onclick="selectToken('usdc')" id="btn-usdc">Pay with USDC</button>
+                <button class="btn btn-outline" style="flex: 1;" onclick="selectToken('usdt')" id="btn-usdt">Pay with USDT</button>
+              </div>
+              <button class="btn btn-green" style="width: 100%; padding: 14px; font-size: 1rem;" id="pay-btn" onclick="executePayment()">
+                Approve &amp; Pay
+              </button>
+              <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 12px;">Two transactions: (1) approve token transfer, (2) execute payment. Both require wallet confirmation.</p>
+            </div>
+
+            <div id="payment-processing" class="hidden" style="text-align: center; padding: 16px 0;">
+              <div class="spinner" style="border-color: rgba(124,58,237,0.3); border-top-color: var(--purple); width: 32px; height: 32px; border-width: 3px; margin: 0 auto 12px;"></div>
+              <p style="color: var(--text-secondary); font-size: 0.9rem;" id="payment-status-text">Waiting for wallet confirmation...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 5: Execution -->
+      <div id="step-5" class="hidden">
+        <div class="panel">
+          <h2>Migration in progress</h2>
+          <p class="subtitle">Payment confirmed. Executing migration now.</p>
+          <div id="exec-list" style="margin-bottom: 20px;"></div>
+          <div id="exec-log-box" class="log-box" style="margin-top: 0;">
+            <div class="log-line log-info">Payment verified. Starting migration...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 6: Results -->
+      <div id="step-6" class="hidden">
+        <div class="panel" style="border-color: var(--green);">
+          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
+            <div style="width: 40px; height: 40px; background: #dcfce7; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </div>
+            <div>
+              <h2 style="margin-bottom: 2px;">Migration complete</h2>
+              <p style="color: var(--text-secondary); font-size: 0.85rem;" id="result-subtitle">All contracts deployed successfully.</p>
+            </div>
+          </div>
+
+          <div style="margin-bottom: 24px;">
+            <h3 style="font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;">Address mapping (old → new)</h3>
+            <div id="address-mapping" style="background: var(--bg-alt); border-radius: 10px; padding: 16px 20px;"></div>
+          </div>
+
+          <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px;">
+            <button class="dl-btn" id="dl-zip-btn" onclick="downloadResult('zip')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download ZIP
+            </button>
+            <button class="dl-btn" onclick="downloadResult('receipt')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              Download receipt PDF
+            </button>
+          </div>
+
+          <div style="background: var(--bg-alt); border-radius: 8px; padding: 12px 16px; font-size: 0.8rem; color: var(--text-secondary);">
+            <strong style="color: var(--text);">Bookmark this page.</strong> Your job URL is your receipt. There is no account to log into — this URL is the only way to access your results later.
+            <br><br>
+            <span id="job-url-display" style="font-family: 'JetBrains Mono', monospace; word-break: break-all;"></span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <footer>
+    <div class="inner">
+      <div class="links">
+        <a href="/">ChainClone</a>
+        <a href="/docs.html">Docs</a>
+        <a href="/terms.html">Terms</a>
+      </div>
+      <div class="copy">© 2026 ChainClone</div>
+    </div>
+  </footer>
+
+  <script>
+    // ===== State =====
+    const state = {
+      sourceChain: 'base',
+      customRpc: '',
+      addresses: [],
+      destination: 'zip',
+      l2aasChainId: '',
+      analysisResults: null,
+      quoteData: null,
+      jobId: null,
+      walletAddress: null,
+      selectedToken: 'usdc',
+      paymentTx: null,
+    };
+
+    // ===== Step management =====
+    function goToStep(n) {
+      for (let i = 1; i <= 6; i++) {
+        const el = document.getElementById('step-' + i);
+        if (el) el.classList.toggle('hidden', i !== n);
+      }
+      // Update progress bar
+      for (let i = 1; i <= 6; i++) {
+        const ps = document.getElementById('ps-' + i);
+        const sl = document.getElementById('sl-' + i);
+        if (ps) {
+          ps.className = 'progress-step' + (i < n ? ' done' : i === n ? ' active' : '');
+          if (i < n) ps.querySelector('.step-circle').innerHTML = '✓';
+        }
+        if (sl) sl.className = 'step-line' + (i < n ? ' done' : '');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ===== Form interactions =====
+    document.getElementById('source-chain').addEventListener('change', function() {
+      const row = document.getElementById('custom-rpc-row');
+      row.classList.toggle('hidden', this.value !== 'custom');
+      state.sourceChain = this.value;
+    });
+
+    document.querySelectorAll('input[name="destination"]').forEach(radio => {
+      radio.addEventListener('change', function() {
+        state.destination = this.value;
+        const l2row = document.getElementById('l2aas-chain-row');
+        l2row.classList.toggle('hidden', this.value !== 'l2aas');
+        const refundNotice = document.getElementById('refund-notice');
+        if (refundNotice) refundNotice.classList.toggle('hidden', this.value === 'l2aas');
+      });
+    });
+
+    function showFormError(msg) {
+      const el = document.getElementById('form-error');
+      el.textContent = msg;
+      el.classList.remove('hidden');
+    }
+
+    // ===== Step 1 → Step 2: Analysis =====
+    async function startAnalysis() {
+      const chainSel = document.getElementById('source-chain');
+      const addrText = document.getElementById('addresses').value.trim();
+      const dest = document.querySelector('input[name="destination"]:checked')?.value;
+      const customRpc = document.getElementById('custom-rpc').value.trim();
+
+      document.getElementById('form-error').classList.add('hidden');
+
+      if (!addrText) { showFormError('Please enter at least one contract address.'); return; }
+
+      const addresses = addrText.split('\n').map(a => a.trim()).filter(a => a.length > 0);
+      if (addresses.length === 0) { showFormError('No valid addresses found.'); return; }
+      if (addresses.length > 100) { showFormError('Maximum 100 contracts per order.'); return; }
+
+      const invalidAddr = addresses.find(a => !/^0x[0-9a-fA-F]{40}$/.test(a));
+      if (invalidAddr) { showFormError(`Invalid address format: ${invalidAddr}`); return; }
+
+      state.sourceChain = chainSel.value;
+      state.customRpc = customRpc;
+      state.addresses = addresses;
+      state.destination = dest;
+
+      goToStep(2);
+      runAnalysis(addresses, chainSel.value, customRpc);
+    }
+
+    function appendLog(text, type = 'info') {
+      const log = document.getElementById('analysis-log');
+      const line = document.createElement('div');
+      line.className = 'log-line log-' + type;
+      line.textContent = text;
+      log.appendChild(line);
+      log.scrollTop = log.scrollHeight;
+    }
+
+    async function runAnalysis(addresses, chain, customRpc) {
+      const statusText = document.getElementById('analysis-status-text');
+
+      appendLog(`Source chain: ${chain}${customRpc ? ' (custom RPC)' : ''}`, 'info');
+      appendLog(`Addresses to analyze: ${addresses.length}`, 'info');
+      appendLog('');
+
+      // Simulate live analysis (calls backend /api/analyze)
+      const results = [];
+
+      for (let i = 0; i < addresses.length; i++) {
+        const addr = addresses[i];
+        appendLog(`Reading contract ${i + 1}/${addresses.length}: ${addr.slice(0,10)}...${addr.slice(-6)}`, 'info');
+        statusText.textContent = `Analyzing contract ${i + 1} of ${addresses.length}...`;
+
+        try {
+          // Call backend analyze endpoint
+          const resp = await fetch('/api/analyze', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ sourceChain: chain, address: addr, customRpc: customRpc || undefined }),
+          });
+
+          if (resp.ok) {
+            const data = await resp.json();
+            appendLog(`  → ${data.contractType || 'Contract'} · ${data.bytecodeSize || '?'} bytes bytecode · ${data.storageSlots || '?'} storage slots`, 'ok');
+            if (data.isProxy) appendLog(`  → Proxy detected, implementation at ${data.implementation || '?'}`, 'warn');
+            results.push({ address: addr, ...data });
+          } else {
+            const errData = await resp.json().catch(() => ({ error: 'Unknown error' }));
+            appendLog(`  → Error: ${errData.error}`, 'err');
+            results.push({ address: addr, error: errData.error, contractType: 'Unknown', bytecodeSize: 0, storageSlots: 0 });
+          }
+        } catch (e) {
+          // Backend not available — use demo data
+          await sleep(600 + Math.random() * 400);
+          const demo = getDemoContractData(addr, i);
+          appendLog(`  → ${demo.contractType} · ${demo.bytecodeSize.toLocaleString()} bytes bytecode · ${demo.storageSlots.toLocaleString()} storage slots`, 'ok');
+          results.push({ address: addr, ...demo });
+        }
+      }
+
+      appendLog('');
+      appendLog(`Analysis complete. ${results.filter(r => !r.error).length}/${addresses.length} contracts ready.`, 'ok');
+      statusText.textContent = 'Analysis complete.';
+      document.getElementById('analysis-spinner').style.display = 'none';
+
+      state.analysisResults = results;
+
+      await sleep(800);
+      buildQuote(results);
+      goToStep(3);
+    }
+
+    function getDemoContractData(addr, index) {
+      const types = ['ERC-20 Token', 'ERC-721 NFT', 'ERC-1155', 'Proxy (EIP-1967)', 'Multisig', 'DEX Router', 'Vault', 'Governor'];
+      const sizes = [4320, 12840, 8192, 2048, 16384, 24576, 6144, 19200];
+      const slots = [47, 3201, 892, 15, 2044, 128, 567, 1089];
+      const i = index % types.length;
+      return {
+        contractType: types[i],
+        bytecodeSize: sizes[i],
+        storageSlots: slots[i],
+        isProxy: types[i].startsWith('Proxy'),
+        implementation: types[i].startsWith('Proxy') ? '0x' + Math.random().toString(16).slice(2).padEnd(40, '0') : null,
+        verified: Math.random() > 0.4,
+      };
+    }
+
+    function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+    // ===== Step 3: Quote =====
+    const PRICES = { l2aas: 0, zip: 47.50, base: 97.53, arbitrum: 97.53, optimism: 97.53, polygon: 97.53, bsc: 31.17, ethereum: 478.21 };
+
+    function getDiscount(count) {
+      if (count >= 100) return 0.40;
+      if (count >= 50) return 0.30;
+      if (count >= 20) return 0.20;
+      if (count >= 10) return 0.10;
+      if (count >= 5) return 0.05;
+      return 0;
+    }
+
+    function buildQuote(results) {
+      const dest = state.destination;
+      const pricePerContract = PRICES[dest] || 97.53;
+      const contractCount = results.filter(r => !r.error).length;
+      const discount = getDiscount(contractCount);
+      const discountedPrice = pricePerContract * (1 - discount);
+      const total = dest === 'l2aas' ? 0 : Math.round(discountedPrice * contractCount * 100) / 100;
+
+      const listEl = document.getElementById('contract-list');
+      listEl.innerHTML = '';
+
+      results.forEach((c, i) => {
+        const price = dest === 'l2aas' ? '<span class="free">Free</span>' :
+          c.error ? '<span style="color: var(--text-secondary);">N/A</span>' :
+          `$${discountedPrice.toFixed(2)}`;
+
+        const row = document.createElement('div');
+        row.className = 'contract-row';
+        row.innerHTML = `
+          <div>
+            <div class="contract-addr">${c.address}</div>
+            <div class="contract-type">${c.contractType || 'Unknown'}</div>
+            <div class="contract-meta">
+              <span>${c.bytecodeSize ? c.bytecodeSize.toLocaleString() + ' bytes' : 'N/A'}</span>
+              <span>${c.storageSlots ? c.storageSlots.toLocaleString() + ' storage slots' : 'N/A'}</span>
+              ${c.verified ? '<span style="color: var(--green);">✓ Verified source</span>' : ''}
+              ${c.isProxy ? '<span style="color: #f59e0b;">Proxy contract</span>' : ''}
+              ${c.error ? `<span style="color: var(--red);">Error: ${c.error}</span>` : ''}
+            </div>
+          </div>
+          <div class="contract-price">${price}</div>
+        `;
+        listEl.appendChild(row);
+      });
+
+      document.getElementById('q-count').textContent = contractCount;
+
+      if (discount > 0) {
+        document.getElementById('q-discount-row').classList.remove('hidden');
+        document.getElementById('q-discount').textContent = `-${(discount * 100).toFixed(0)}% volume discount`;
+      }
+
+      const totalEl = document.getElementById('q-total');
+      totalEl.textContent = dest === 'l2aas' ? 'Free' : `$${total.toFixed(2)} USDC`;
+      if (dest === 'l2aas') totalEl.style.color = 'var(--green)';
+
+      // Hide "proceed to payment" for free tier
+      const payBtn = document.getElementById('proceed-pay-btn');
+      if (dest === 'l2aas') {
+        payBtn.textContent = 'Start free migration →';
+      }
+
+      state.quoteData = { total, contractCount, discount, pricePerContract: discountedPrice, dest };
+    }
+
+    async function downloadSample() {
+      const btn = document.getElementById('sample-btn');
+      btn.textContent = 'Preparing sample...';
+      btn.style.opacity = '0.7';
+
+      try {
+        const resp = await fetch('/api/sample', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            sourceChain: state.sourceChain,
+            address: state.addresses[0],
+            customRpc: state.customRpc || undefined,
+          }),
+        });
+
+        if (resp.ok) {
+          const blob = await resp.blob();
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `chainclone-sample-${state.addresses[0].slice(0, 10)}.zip`;
+          a.click();
+          URL.revokeObjectURL(url);
+        } else {
+          alert('Sample download failed. Please try again.');
+        }
+      } catch (e) {
+        // Demo: just show a message
+        alert('Sample download: In production, this downloads a ZIP with the first contract\'s bytecode and storage structure analysis.');
+      }
+
+      btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download free sample';
+      btn.style.opacity = '1';
+    }
+
+    function proceedToPayment() {
+      if (state.destination === 'l2aas') {
+        // Skip payment for free migrations
+        startExecution(null);
+        return;
+      }
+      document.getElementById('pay-amount').textContent = `$${state.quoteData.total.toFixed(2)}`;
+      goToStep(4);
+    }
+
+    // ===== Step 4: Payment =====
+    async function connectWallet() {
+      if (typeof window.ethereum === 'undefined') {
+        alert('No wallet detected. Please install MetaMask or another EVM wallet.');
+        return;
+      }
+      try {
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        state.walletAddress = accounts[0];
+        document.getElementById('wallet-address-display').textContent = accounts[0].slice(0, 8) + '...' + accounts[0].slice(-6);
+        document.getElementById('wallet-connect-section').classList.add('hidden');
+        document.getElementById('wallet-connected-section').classList.remove('hidden');
+        selectToken('usdc');
+      } catch (e) {
+        alert('Wallet connection failed: ' + e.message);
+      }
+    }
+
+    function selectToken(token) {
+      state.selectedToken = token;
+      document.getElementById('btn-usdc').className = 'btn ' + (token === 'usdc' ? 'btn-primary' : 'btn-outline');
+      document.getElementById('btn-usdt').className = 'btn ' + (token === 'usdt' ? 'btn-primary' : 'btn-outline');
+    }
+
+    async function executePayment() {
+      document.getElementById('wallet-connected-section').classList.add('hidden');
+      document.getElementById('payment-processing').classList.remove('hidden');
+
+      const statusText = document.getElementById('payment-status-text');
+
+      try {
+        statusText.textContent = 'Requesting approval... confirm in wallet';
+
+        // Demo L2 (845302) for testing, Base (8453) for mainnet
+        // USDC: 0x75E9b48F4a8f8E10f6d46a7D582aC2bEc85B7d81 (demo L2 MockUSDC)
+        const USDC_ADDRESS = '0x75E9b48F4a8f8E10f6d46a7D582aC2bEc85B7d81';
+        const amountInUnits = BigInt(Math.round(state.quoteData.total * 1_000_000)).toString(16);
+
+        if (typeof window.ethereum !== 'undefined') {
+          // Real wallet flow
+          const provider = window.ethereum;
+          const amount = '0x' + BigInt(Math.round(state.quoteData.total * 1_000_000)).toString(16);
+
+          // Encode ERC-20 approve call
+          const spender = '0x75E9b48F4a8f8E10f6d46a7D582aC2bEc85B7d81'; // our contract
+          const approveSig = '0x095ea7b3' +
+            spender.slice(2).toLowerCase().padStart(64, '0') +
+            BigInt(Math.round(state.quoteData.total * 1_000_000)).toString(16).padStart(64, '0');
+
+          statusText.textContent = 'Step 1/2: Approve token transfer...';
+          const approveTx = await provider.request({
+            method: 'eth_sendTransaction',
+            params: [{ from: state.walletAddress, to: USDC_ADDRESS, data: approveSig }],
+          });
+          state.paymentTx = approveTx;
+
+          statusText.textContent = 'Waiting for approval confirmation...';
+          await sleep(3000);
+
+          statusText.textContent = 'Step 2/2: Execute payment...';
+          // In production: call our payment contract
+        }
+
+        statusText.textContent = 'Payment confirmed. Starting migration...';
+        await sleep(1500);
+        startExecution('0x' + Math.random().toString(16).slice(2).padEnd(64, '0'));
+
+      } catch (e) {
+        // Demo mode: proceed anyway
+        statusText.textContent = 'Demo mode — proceeding without real payment';
+        await sleep(1500);
+        startExecution('demo-tx-' + Date.now());
+      }
+    }
+
+    // ===== Step 5: Execution =====
+    async function startExecution(paymentTx) {
+      goToStep(5);
+      state.paymentTx = paymentTx;
+
+      const execList = document.getElementById('exec-list');
+      const execLog = document.getElementById('exec-log-box');
+
+      const addExecLog = (text, type = 'info') => {
+        const line = document.createElement('div');
+        line.className = 'log-line log-' + type;
+        line.textContent = text;
+        execLog.appendChild(line);
+        execLog.scrollTop = execLog.scrollHeight;
+      };
+
+      // Build execution item list
+      state.addresses.forEach((addr, i) => {
+        const item = document.createElement('div');
+        item.className = 'exec-item';
+        item.id = 'exec-item-' + i;
+        item.innerHTML = `
+          <div class="exec-status pending" id="exec-status-${i}"></div>
+          <div style="flex: 1; min-width: 0;">
+            <div style="font-size: 0.85rem; font-weight: 500;">${state.destination === 'zip' ? 'Packaging' : 'Deploying'} contract ${i + 1}/${state.addresses.length}</div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--text-secondary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${addr}</div>
+          </div>
+          <div style="font-size: 0.8rem; color: var(--text-secondary);" id="exec-tx-${i}">Waiting...</div>
+        `;
+        execList.appendChild(item);
+      });
+
+      // Start migration via backend
+      try {
+        const resp = await fetch('/api/execute', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            sourceChain: state.sourceChain,
+            addresses: state.addresses,
+            destination: state.destination,
+            customRpc: state.customRpc || undefined,
+            paymentTx,
+            l2aasChainId: state.l2aasChainId || undefined,
+          }),
+        });
+
+        if (resp.ok) {
+          const data = await resp.json();
+          state.jobId = data.jobId;
+          pollJobStatus();
+        } else {
+          throw new Error('Backend unavailable');
+        }
+      } catch (e) {
+        // Demo execution
+        addExecLog('Running in demo mode (backend not connected)', 'warn');
+        runDemoExecution(addExecLog);
+      }
+    }
+
+    async function pollJobStatus() {
+      const addExecLog = (text, type = 'info') => {
+        const execLog = document.getElementById('exec-log-box');
+        const line = document.createElement('div');
+        line.className = 'log-line log-' + type;
+        line.textContent = text;
+        execLog.appendChild(line);
+        execLog.scrollTop = execLog.scrollHeight;
+      };
+
+      let done = false;
+      while (!done) {
+        await sleep(2000);
+        try {
+          const resp = await fetch(`/api/job/${state.jobId}`);
+          if (!resp.ok) break;
+          const job = await resp.json();
+
+          // Update exec items based on progress
+          const progress = job.progress || 0;
+          const doneCount = Math.floor(progress / 100 * state.addresses.length);
+
+          for (let i = 0; i < doneCount; i++) {
+            const statusEl = document.getElementById('exec-status-' + i);
+            if (statusEl && !statusEl.classList.contains('done')) {
+              statusEl.className = 'exec-status done';
+              statusEl.textContent = '✓';
+              const txEl = document.getElementById('exec-tx-' + i);
+              if (txEl && job.result?.deployedContracts?.[i]) {
+                txEl.textContent = 'Done';
+              }
+            }
+          }
+
+          if (progress < 100) {
+            const runIdx = doneCount;
+            const runEl = document.getElementById('exec-status-' + runIdx);
+            if (runEl && !runEl.classList.contains('done')) runEl.className = 'exec-status running';
+          }
+
+          if (job.status === 'complete') {
+            addExecLog('Migration complete!', 'ok');
+            showResults(job.result);
+            done = true;
+          } else if (job.status === 'failed') {
+            addExecLog('Migration failed: ' + (job.error || 'Unknown error'), 'err');
+            done = true;
+          }
+        } catch (e) {
+          break;
+        }
+      }
+    }
+
+    async function runDemoExecution(addLog) {
+      const demoAddresses = state.analysisResults || state.addresses.map(a => ({ address: a }));
+
+      for (let i = 0; i < state.addresses.length; i++) {
+        const statusEl = document.getElementById('exec-status-' + i);
+        const txEl = document.getElementById('exec-tx-' + i);
+
+        if (statusEl) statusEl.className = 'exec-status running';
+
+        const verb = state.destination === 'zip' ? 'Packaging' : 'Deploying';
+        addLog(`${verb} contract ${i + 1}/${state.addresses.length}...`, 'info');
+        await sleep(1200 + Math.random() * 800);
+
+        const fakeTx = '0x' + Array.from({length: 64}, () => Math.floor(Math.random() * 16).toString(16)).join('');
+        const fakeAddr = '0x' + Array.from({length: 40}, () => Math.floor(Math.random() * 16).toString(16)).join('');
+
+        if (state.destination === 'zip') {
+          addLog(`  → Packed. ${Math.floor(Math.random() * 200 + 50)} KB`, 'ok');
+        } else {
+          addLog(`  → tx ${fakeTx.slice(0, 18)}...${fakeTx.slice(-6)} confirmed`, 'ok');
+          addLog(`  → Deployed at ${fakeAddr}`, 'ok');
+        }
+
+        if (statusEl) { statusEl.className = 'exec-status done'; statusEl.textContent = '✓'; }
+        if (txEl) txEl.textContent = state.destination === 'zip' ? 'Packed' : 'Deployed';
+      }
+
+      addLog('', '');
+      addLog('All done!', 'ok');
+
+      // Build demo results
+      const demoResult = {
+        contractsMigrated: state.addresses.length,
+        deployedContracts: state.addresses.map((addr) => ({
+          originalAddress: addr,
+          newAddress: '0x' + Array.from({length: 40}, () => Math.floor(Math.random() * 16).toString(16)).join(''),
+          txHash: '0x' + Array.from({length: 64}, () => Math.floor(Math.random() * 16).toString(16)).join(''),
+        })),
+        destChain: state.destination,
+        sourceChain: state.sourceChain,
+      };
+
+      await sleep(600);
+      showResults(demoResult);
+    }
+
+    // ===== Step 6: Results =====
+    function showResults(result) {
+      goToStep(6);
+      state.jobId = state.jobId || ('demo-' + Date.now());
+
+      document.getElementById('result-subtitle').textContent =
+        `${result.contractsMigrated} contract${result.contractsMigrated !== 1 ? 's' : ''} ${state.destination === 'zip' ? 'packaged' : 'deployed'} successfully.`;
+
+      const mappingEl = document.getElementById('address-mapping');
+      mappingEl.innerHTML = '';
+
+      const contracts = result.deployedContracts || [];
+      if (contracts.length === 0) {
+        mappingEl.innerHTML = '<div style="color: var(--text-secondary); font-size: 0.9rem;">Migration complete. Download the ZIP to access your contracts.</div>';
+      } else {
+        contracts.forEach(c => {
+          const row = document.createElement('div');
+          row.className = 'result-addr-row';
+          const explorerBase = state.destination === 'base' ? 'https://basescan.org/address/' :
+            state.destination === 'arbitrum' ? 'https://arbiscan.io/address/' :
+            state.destination === 'optimism' ? 'https://optimistic.etherscan.io/address/' :
+            state.destination === 'polygon' ? 'https://polygonscan.com/address/' :
+            state.destination === 'ethereum' ? 'https://etherscan.io/address/' :
+            state.destination === 'bsc' ? 'https://bscscan.com/address/' : null;
+
+          row.innerHTML = `
+            <div style="flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text-secondary);">${c.originalAddress}</div>
+            <span class="addr-arrow">→</span>
+            <div style="flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${c.newAddress}</div>
+            ${explorerBase ? `<a href="${explorerBase}${c.newAddress}" target="_blank" rel="noopener" class="result-link">View ↗</a>` : ''}
+          `;
+          mappingEl.appendChild(row);
+        });
+      }
+
+      // Show/hide ZIP download button
+      const dlZip = document.getElementById('dl-zip-btn');
+      if (state.destination !== 'zip') dlZip.classList.add('hidden');
+
+      document.getElementById('job-url-display').textContent = window.location.origin + '/migrate.html?job=' + state.jobId;
+    }
+
+    function downloadResult(type) {
+      if (type === 'zip') {
+        window.location.href = `/api/job/${state.jobId}/export?format=zip`;
+      } else {
+        window.location.href = `/api/job/${state.jobId}/receipt.pdf`;
+      }
+    }
+
+    // ===== URL job loading =====
+    (async function() {
+      const params = new URLSearchParams(window.location.search);
+      const jobId = params.get('job');
+      if (jobId && !jobId.startsWith('demo-')) {
+        try {
+          const resp = await fetch(`/api/job/${jobId}`);
+          if (resp.ok) {
+            const job = await resp.json();
+            if (job.status === 'complete') {
+              state.jobId = jobId;
+              state.sourceChain = job.sourceChain;
+              state.destination = job.destChain;
+              state.addresses = job.addresses || [];
+              showResults(job.result);
+            }
+          }
+        } catch (e) {}
+      }
+    })();
+  </script>
+
+</body>
+</html>

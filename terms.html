@@ -3,153 +3,386 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Terms of Use — ChainClone</title>
-  <meta name="description" content="ChainClone Terms of Use. Terms and conditions for the ChainClone blockchain migration service.">
+  <title>Terms of Service — ChainClone</title>
+  <meta name="description" content="ChainClone Terms of Service. Terms and conditions governing your use of the ChainClone contract migration service.">
   <link rel="canonical" href="https://chainclone.net/terms.html">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x1F9EC;</text></svg>">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%237c3aed'/%3E%3Crect x='5' y='5' width='13' height='17' rx='2' fill='none' stroke='%23fff' stroke-width='1.8'/%3E%3Crect x='14' y='10' width='13' height='17' rx='2' fill='%237c3aed' stroke='%23fff' stroke-width='1.8'/%3E%3Cpath d='M17 14h7M17 18h7M17 22h4' stroke='%23fff' stroke-width='1.4' stroke-linecap='round'/%3E%3C/svg%3E">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://chainclone.net/terms.html">
-  <meta property="og:title" content="Terms of Use — ChainClone">
-  <meta property="og:description" content="Terms and conditions for the ChainClone blockchain migration service.">
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Terms of Use — ChainClone">
-  <meta name="twitter:description" content="Terms and conditions for the ChainClone blockchain migration service.">
+  <meta property="og:title" content="Terms of Service — ChainClone">
+  <meta property="og:description" content="Terms and conditions governing use of the ChainClone contract migration service.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: Georgia, 'Times New Roman', Times, serif;
-      font-size: 11.5pt;
-      line-height: 1.7;
-      color: #1a1a1a;
-      background: #fff;
-      max-width: 8.5in;
-      margin: 0 auto;
-      padding: 1in 1.2in;
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --purple: #7c3aed;
+      --purple-light: #ede9fe;
+      --text: #1a1a2e;
+      --text-secondary: #555770;
+      --bg: #ffffff;
+      --bg-alt: #f7f8fc;
+      --border: #e4e7ec;
+      --radius: 10px;
     }
-    h1 {
-      font-size: 22pt;
-      text-align: center;
-      margin-bottom: 4pt;
-      font-weight: bold;
-      letter-spacing: 0.5pt;
-    }
-    .subtitle {
-      text-align: center;
-      font-size: 11pt;
-      color: #555;
-      margin-bottom: 6pt;
-    }
-    .effective-date {
-      text-align: center;
-      font-size: 10pt;
-      color: #777;
-      margin-bottom: 36pt;
-    }
-    h2 {
-      font-size: 14pt;
-      font-weight: bold;
-      margin-top: 32pt;
-      margin-bottom: 10pt;
-      border-bottom: 1px solid #ccc;
-      padding-bottom: 4pt;
-    }
-    p {
-      margin-bottom: 10pt;
-      text-align: justify;
-    }
-    ul, ol {
-      margin: 10pt 0 10pt 24pt;
-    }
-    li {
-      margin-bottom: 6pt;
-    }
-    a {
-      color: #4f46e5;
-      text-decoration: none;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
-    .back-link {
-      display: inline-block;
-      margin-bottom: 24pt;
-      font-family: system-ui, -apple-system, sans-serif;
-      font-size: 10pt;
-      color: #4f46e5;
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; -webkit-font-smoothing: antialiased; }
+    a { color: var(--purple); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    nav { background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 16px 0; position: sticky; top: 0; z-index: 100; }
+    nav .inner { max-width: 800px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; }
+    .logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.25rem; letter-spacing: -0.5px; color: var(--text); }
+    .logo svg { width: 28px; height: 28px; }
+    .nav-links { display: flex; gap: 24px; font-size: 0.9rem; font-weight: 500; }
+    .nav-links a { color: var(--text-secondary); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+
+    .container { max-width: 800px; margin: 0 auto; padding: 48px 24px 80px; }
+
+    .page-header { margin-bottom: 48px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+    .page-header h1 { font-size: 2.25rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 8px; }
+    .page-header .meta { color: var(--text-secondary); font-size: 0.9rem; }
+
+    h2 { font-size: 1.15rem; font-weight: 700; margin: 44px 0 14px; padding-top: 20px; color: var(--text); scroll-margin-top: 80px; }
+    h3 { font-size: 0.975rem; font-weight: 600; margin: 22px 0 8px; color: var(--text); }
+    p { margin-bottom: 14px; color: var(--text-secondary); font-size: 0.95rem; }
+    ul, ol { margin-bottom: 14px; padding-left: 24px; color: var(--text-secondary); font-size: 0.95rem; }
+    li { margin-bottom: 6px; }
+    strong { color: var(--text); font-weight: 600; }
+
+    .toc { background: var(--bg-alt); border: 1px solid var(--border); border-radius: 12px; padding: 28px 32px; margin-bottom: 48px; }
+    .toc-title { font-size: 0.8rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 16px; }
+    .toc ol { margin: 0; column-count: 2; column-gap: 24px; }
+    .toc li { margin-bottom: 5px; font-size: 0.85rem; }
+    .toc a { color: var(--text-secondary); }
+    .toc a:hover { color: var(--purple); text-decoration: none; }
+
+    .notice { background: #fff7ed; border: 1px solid #fed7aa; border-radius: 8px; padding: 16px 20px; margin: 20px 0; font-size: 0.9rem; color: #92400e; }
+
+    footer { border-top: 1px solid var(--border); padding: 24px 0; text-align: center; font-size: 0.8rem; color: #94a3b8; }
+    footer a { color: #94a3b8; }
+
+    @media (max-width: 600px) {
+      .page-header h1 { font-size: 1.75rem; }
+      .toc ol { column-count: 1; }
+      .nav-links { display: none; }
     }
   </style>
 </head>
 <body>
 
-  <a href="/" class="back-link">&larr; Back to ChainClone</a>
+  <nav>
+    <div class="inner">
+      <a href="/" class="logo">
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" rx="6" fill="#7c3aed"/>
+          <rect x="5" y="5" width="13" height="17" rx="2" fill="none" stroke="#fff" stroke-width="1.8"/>
+          <rect x="14" y="10" width="13" height="17" rx="2" fill="#7c3aed" stroke="#fff" stroke-width="1.8"/>
+          <path d="M17 14h7M17 18h7M17 22h4" stroke="#fff" stroke-width="1.4" stroke-linecap="round"/>
+        </svg>
+        <span>Chain<span style="color:var(--purple)">Clone</span></span>
+      </a>
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/migrate.html">Migrate</a>
+        <a href="/docs.html">Docs</a>
+      </div>
+    </div>
+  </nav>
 
-  <h1>TERMS OF USE</h1>
-  <p class="subtitle">ChainClone &mdash; Blockchain Migration Service</p>
-  <p class="effective-date">Effective Date: April 9, 2026</p>
+  <div class="container">
 
-  <h2>1. Acceptance of Terms</h2>
-  <p>By accessing or using the ChainClone service ("Service") operated by Mesa Operations LLC, a Wyoming limited liability company ("Company," "we," "us"), you ("Customer," "you") agree to be bound by these Terms of Use. If you do not agree, do not use the Service.</p>
+    <div class="page-header">
+      <h1>Terms of Service</h1>
+      <div class="meta">Last updated: April 12, 2026 &nbsp;&middot;&nbsp; Effective immediately upon use of the Service</div>
+    </div>
 
-  <h2>2. Description of Service</h2>
-  <p>ChainClone provides blockchain state migration services for EVM-compatible chains. The Service reads publicly available on-chain data (contract bytecode, storage state, account balances, and token ownership records) from a source chain and deploys equivalent state on a destination chain specified by the Customer.</p>
-  <p>The Service does not migrate transaction history, event logs, or off-chain data. Migrated contracts receive new addresses on the destination chain.</p>
+    <div class="notice">
+      <strong>Read before using the Service.</strong> These Terms govern your use of ChainClone. By submitting a migration request or making a payment, you agree to be bound by these Terms in full. If you do not agree, do not use the Service.
+    </div>
 
-  <h2>3. Eligibility</h2>
-  <p>You must be at least 18 years of age and have the legal capacity to enter into a binding agreement. By using the Service, you represent that you meet these requirements.</p>
+    <div class="toc">
+      <div class="toc-title">Table of Contents</div>
+      <ol>
+        <li><a href="#s1">Acceptance of Terms</a></li>
+        <li><a href="#s2">Description of Service</a></li>
+        <li><a href="#s3">One-Shot Service Model</a></li>
+        <li><a href="#s4">Eligibility</a></li>
+        <li><a href="#s5">Payment and Pricing</a></li>
+        <li><a href="#s6">Gas Costs</a></li>
+        <li><a href="#s7">Refund Policy</a></li>
+        <li><a href="#s8">Free Sample</a></li>
+        <li><a href="#s9">Customer Responsibilities</a></li>
+        <li><a href="#s10">Legal Compliance</a></li>
+        <li><a href="#s11">Intellectual Property</a></li>
+        <li><a href="#s12">Prohibited Uses</a></li>
+        <li><a href="#s13">Service Availability</a></li>
+        <li><a href="#s14">Disclaimer of Warranties</a></li>
+        <li><a href="#s15">Limitation of Liability</a></li>
+        <li><a href="#s16">Indemnification</a></li>
+        <li><a href="#s17">Third-Party Chains</a></li>
+        <li><a href="#s18">No Ongoing Relationship</a></li>
+        <li><a href="#s19">Privacy and Data</a></li>
+        <li><a href="#s20">Blockchain Data</a></li>
+        <li><a href="#s21">Technical Limitations</a></li>
+        <li><a href="#s22">Modifications to Terms</a></li>
+        <li><a href="#s23">Termination</a></li>
+        <li><a href="#s24">Dispute Resolution</a></li>
+        <li><a href="#s25">Governing Law</a></li>
+        <li><a href="#s26">Class Action Waiver</a></li>
+        <li><a href="#s27">Operator Information</a></li>
+        <li><a href="#s28">Severability</a></li>
+        <li><a href="#s29">Entire Agreement</a></li>
+      </ol>
+    </div>
 
-  <h2>4. Pricing and Payment</h2>
-  <ul>
-    <li><strong>Free Tier:</strong> Migration to L2aaS blockchains is provided at no cost.</li>
-    <li><strong>Paid Tier:</strong> Migration to third-party EVM chains is quoted on a per-project basis, starting at $500 USDC. Quotes are based on contract complexity, storage size, and destination chain gas costs.</li>
-    <li><strong>Payment:</strong> All paid migrations are invoiced and paid in USDC. Migration begins after on-chain payment confirmation.</li>
-    <li><strong>Refunds:</strong> Payments are non-refundable once migration has begun. If migration fails due to a technical issue on our side, we will re-attempt at no additional cost or issue a full refund at our discretion.</li>
-  </ul>
+    <h2 id="s1">1. Acceptance of Terms</h2>
+    <p>These Terms of Service ("Terms") constitute a legally binding agreement between you ("Customer," "you," or "your") and the operator of ChainClone (the "Service," "we," "us," or "our") governing your access to and use of the ChainClone smart contract migration service available at chainclone.net and any associated services, APIs, or tools.</p>
+    <p>By accessing the Service, submitting a migration request, initiating contract analysis, making a payment, or downloading any output produced by the Service, you represent that you have read, understood, and agree to be bound by these Terms and all applicable laws. If you are acting on behalf of a legal entity, you represent that you have the authority to bind that entity to these Terms.</p>
+    <p>If you do not agree to these Terms, you must not use the Service.</p>
 
-  <h2>5. Customer Responsibilities</h2>
-  <p>You are responsible for:</p>
-  <ul>
-    <li>Providing accurate source chain identifiers and contract addresses.</li>
-    <li>Ensuring you have the right to deploy the migrated contracts on the destination chain.</li>
-    <li>Configuring any external dependencies (oracles, bridges, off-chain services) on the destination chain after migration.</li>
-    <li>Verifying migrated state on the destination chain after completion.</li>
-  </ul>
+    <h2 id="s2">2. Description of Service</h2>
+    <p>ChainClone is a one-time-use smart contract migration service. The Service reads deployed smart contract bytecode and storage state from supported EVM-compatible source blockchains and produces a deployable copy suitable for import into a destination chain chosen by the Customer.</p>
+    <p>Specifically, the Service may:</p>
+    <ul>
+      <li>Extract deployed bytecode from a source chain address via JSON-RPC</li>
+      <li>Enumerate storage slots and reconstruct state variables</li>
+      <li>Detect proxy patterns and resolve implementation addresses</li>
+      <li>Produce a ZIP archive containing bytecode, ABI, storage state, and analysis</li>
+      <li>Deploy the extracted contract directly on a supported destination chain</li>
+      <li>Provide a pre-payment analysis report and quote</li>
+      <li>Provide a free sample archive of the first contract prior to payment</li>
+    </ul>
+    <p>The Service does not guarantee that a migrated contract will function identically to the original on the destination chain, and does not provide ongoing support, maintenance, or monitoring of deployed contracts.</p>
 
-  <h2>6. Intellectual Property</h2>
-  <p>The Service reads publicly available blockchain data. We make no claim of ownership over migrated contract code or state. You represent that you have the right to request migration of the specified contracts and that such migration does not infringe any third-party intellectual property rights.</p>
+    <h2 id="s3">3. One-Shot Service Model</h2>
+    <p>ChainClone operates as a one-time transaction service. There are no accounts, subscriptions, or ongoing relationships. Each migration request is a discrete, independent transaction. You do not need to register, create an account, or provide personal information to use the Service.</p>
+    <p>Your job ID and job URL constitute your only record of the transaction. We do not maintain a customer database. <strong>It is your responsibility to save your job URL.</strong> We cannot recover job results if you lose your job URL. Job results are retained for a limited time (30 days) and then deleted.</p>
 
-  <h2>7. Data and Privacy</h2>
-  <p>The Service operates exclusively on publicly available blockchain data. We do not collect, store, or process personal data beyond what is necessary to communicate with you (e.g., email address for quote delivery). We do not maintain user accounts or databases of customer information.</p>
+    <h2 id="s4">4. Eligibility</h2>
+    <p>You must be at least 18 years old to use the Service. By using the Service, you represent that you are at least 18 years old and have the legal capacity to enter into binding contracts under applicable law.</p>
+    <p>The Service is not available to residents of jurisdictions where the use of cryptocurrency payment systems, decentralized applications, or smart contract services is prohibited or restricted by law. It is your responsibility to determine whether using the Service is lawful in your jurisdiction.</p>
 
-  <h2>8. Disclaimer of Warranties</h2>
-  <p>THE SERVICE IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, WHETHER EXPRESS, IMPLIED, STATUTORY, OR OTHERWISE. WE DISCLAIM ALL WARRANTIES INCLUDING, WITHOUT LIMITATION, WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT.</p>
-  <p>We do not guarantee that migrated contracts will behave identically on the destination chain. Differences in gas pricing, opcode support, precompiles, and block parameters between chains may affect contract behavior.</p>
+    <h2 id="s5">5. Payment and Pricing</h2>
+    <p>All prices are denominated in US dollars and payable in USDC or USDT stablecoin. Payment is made on-chain via your own non-custodial wallet. We do not accept credit cards, bank transfers, or any other form of payment.</p>
+    <p>Current prices per contract, by destination:</p>
+    <ul>
+      <li>L2aaS chain: Free</li>
+      <li>Export ZIP: $47.50 USDC per contract</li>
+      <li>Base / Arbitrum / Optimism / Polygon: $97.53 USDC per contract</li>
+      <li>BNB Chain: $31.17 USDC per contract</li>
+      <li>Ethereum Mainnet: $478.21 USDC per contract</li>
+    </ul>
+    <p>Volume discounts are applied automatically: 5% for 5–9 contracts, 10% for 10–19, 20% for 20–49, 30% for 50–99, 40% for 100 or more contracts in a single order.</p>
+    <p>Prices are subject to change without notice. The price displayed at the time you confirm your order and submit payment is the binding price for that transaction.</p>
+    <p>Payment is verified on-chain before the Service begins migration. Payments that cannot be verified on-chain will not trigger migration. We are not responsible for lost funds sent to incorrect addresses, submitted with insufficient gas, or lost due to network congestion.</p>
 
-  <h2>9. Limitation of Liability</h2>
-  <p>TO THE MAXIMUM EXTENT PERMITTED BY LAW, THE COMPANY SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR ANY LOSS OF PROFITS OR REVENUE, ARISING OUT OF OR RELATED TO YOUR USE OF THE SERVICE. OUR TOTAL LIABILITY SHALL NOT EXCEED THE AMOUNT PAID BY YOU FOR THE SPECIFIC MIGRATION THAT GAVE RISE TO THE CLAIM.</p>
+    <h2 id="s6">6. Gas Costs</h2>
+    <p><strong>Gas costs are non-refundable under all circumstances.</strong></p>
+    <p>When the Service deploys contracts on a destination blockchain on your behalf (for paid on-chain deployments to Base, Arbitrum, Optimism, Polygon, BNB Chain, or Ethereum), gas fees are paid to the destination chain's validators and miners. These fees are:</p>
+    <ul>
+      <li>Burned or distributed on-chain immediately upon transaction submission</li>
+      <li>Irreversible — no entity, including us, can recover them</li>
+      <li>Not part of the Service fee paid to us — they are separate network fees</li>
+      <li>Non-refundable regardless of whether the migration succeeds, partially succeeds, or fails</li>
+    </ul>
+    <p>By proceeding with a paid on-chain migration, you acknowledge and accept that gas costs will be incurred and cannot be recovered under any circumstances. We include a gas budget in our pricing to cover expected deployment costs, but we do not guarantee that the actual gas consumed will equal the budget. Excess gas not consumed is not returned to you separately; it is factored into our pricing model.</p>
 
-  <h2>10. Prohibited Uses</h2>
-  <p>You may not use the Service to:</p>
-  <ul>
-    <li>Migrate contracts for the purpose of fraud, impersonation, or deception.</li>
-    <li>Clone contracts to create counterfeit tokens intended to deceive users.</li>
-    <li>Violate any applicable law, regulation, or third-party rights.</li>
-    <li>Interfere with or disrupt the Service or its infrastructure.</li>
-  </ul>
+    <h2 id="s7">7. Refund Policy</h2>
+    <p>Subject to Section 6 (Gas Costs), our refund policy is as follows:</p>
 
-  <h2>11. Termination</h2>
-  <p>We reserve the right to refuse or terminate service to any Customer at any time, for any reason, with or without notice. Upon termination, any pending paid migrations will be refunded in full.</p>
+    <h3>Full refund</h3>
+    <p>A full refund of your payment (100%) will be issued if we are unable to begin migration and no on-chain transactions have been submitted on the destination chain on your behalf.</p>
 
-  <h2>12. Governing Law</h2>
-  <p>These Terms are governed by the laws of the State of Wyoming, United States, without regard to conflict of law principles. Any dispute arising under these Terms shall be resolved in the state or federal courts located in Wyoming.</p>
+    <h3>Partial refund</h3>
+    <p>A partial refund equal to your payment minus the value of gas costs already expended will be issued if migration fails after one or more on-chain transactions have been submitted. We will provide a detailed breakdown of gas consumed.</p>
 
-  <h2>13. Changes to Terms</h2>
-  <p>We may update these Terms at any time. The effective date at the top of this page indicates when the Terms were last revised. Continued use of the Service after changes constitutes acceptance of the updated Terms.</p>
+    <h3>No refund</h3>
+    <p>No refund is available in the following circumstances:</p>
+    <ul>
+      <li>Migration completed successfully — all contracted deliverables were provided</li>
+      <li>Partial completion — contracts already deployed are considered delivered; refund applies only to undelivered contracts</li>
+      <li>Customer provided invalid, self-destructed, or non-existent contract addresses</li>
+      <li>Customer provided an incorrect or inaccessible source chain RPC</li>
+      <li>The source chain became unavailable or reorganized after payment was accepted</li>
+      <li>Customer's destination wallet or deployment parameters were invalid</li>
+      <li>Free sample was downloaded (the sample itself is a deliverable)</li>
+      <li>ZIP export was downloaded</li>
+    </ul>
+    <p>To request a refund, contact us via the support mechanism linked on your job results page within 14 days of payment. Refunds are processed to the originating wallet address only, within 48 hours of approval.</p>
 
-  <h2>14. Contact</h2>
-  <p>Mesa Operations LLC<br>
-  30 N Gould St Ste R<br>
-  Sheridan, WY 82801<br>
-  Email: legal@chainclone.net</p>
+    <h2 id="s8">8. Free Sample</h2>
+    <p>Prior to payment, the Service offers a free download of a sample archive for the first contract in your proposed migration. This sample is provided free of charge and contains limited information: bytecode, ABI (if available), storage layout analysis, and a structural summary.</p>
+    <p>The free sample is provided "as-is" without warranty of any kind. It does not constitute a commitment to complete the full migration. The Service may decline to complete a migration even after a free sample has been downloaded.</p>
+    <p>The free sample is not sufficient to independently deploy a functional clone of the contract. It is intended solely for quality verification purposes. Using the sample to attempt your own redeployment outside of the Service is permitted but entirely at your own risk.</p>
+
+    <h2 id="s9">9. Customer Responsibilities</h2>
+    <p>You are solely responsible for:</p>
+    <ul>
+      <li>Verifying that the migrated contract functions correctly on the destination chain</li>
+      <li>Testing the deployed clone before using it in production</li>
+      <li>Updating any hardcoded external addresses within the contract to point to destination-chain equivalents</li>
+      <li>Ensuring you have the legal right to clone the contracts you submit</li>
+      <li>Complying with the terms of service of the original contract's project or protocol</li>
+      <li>Securing the private keys of any wallet used for deployment</li>
+      <li>Saving your job URL for future reference</li>
+      <li>Ensuring your wallet has sufficient funds before initiating payment</li>
+    </ul>
+    <p>We provide migration as a technical service only. We do not review the purpose, function, or legality of contracts submitted for migration. We are not responsible for any harm arising from your use of a migrated contract.</p>
+
+    <h2 id="s10">10. Legal Compliance</h2>
+    <p>You represent and warrant that:</p>
+    <ul>
+      <li>You have the legal right, license, or authority to reproduce and deploy any contract you submit for migration</li>
+      <li>Your use of the Service does not violate any applicable law, regulation, or third-party rights</li>
+      <li>You are not on any sanctions list or subject to any government embargo that would prohibit your use of cryptocurrency services</li>
+      <li>You will not use the Service to migrate contracts related to illegal activities, fraud, money laundering, or sanctions evasion</li>
+      <li>You will not use the Service to infringe the intellectual property rights of any third party</li>
+    </ul>
+    <p>We reserve the right to refuse any migration request at our discretion. We may, but are not obligated to, screen contracts for known malicious patterns, sanctioned addresses, or violations of these Terms.</p>
+
+    <h2 id="s11">11. Intellectual Property</h2>
+    <p>All software, algorithms, tools, and processes used by the Service to perform contract migration are the intellectual property of the operator and are protected by applicable intellectual property laws. You do not acquire any rights to our software or processes by using the Service.</p>
+    <p>You retain all rights you had to any contract you submit for migration. We do not claim ownership over migrated contract bytecode or output files produced by the Service on your behalf.</p>
+    <p>You represent that submitting a contract for migration does not violate the intellectual property rights of any third party. If a third party's contract is submitted without authorization, you are solely liable for any resulting claims.</p>
+
+    <h2 id="s12">12. Prohibited Uses</h2>
+    <p>You may not use the Service to:</p>
+    <ul>
+      <li>Clone or deploy contracts designed to defraud, deceive, or harm any person</li>
+      <li>Deploy rug-pull mechanisms, honeypot contracts, or any contract with hidden malicious functionality</li>
+      <li>Circumvent sanctions, anti-money laundering laws, or other legal restrictions</li>
+      <li>Create unauthorized copies of contracts where you do not have the right to copy</li>
+      <li>Attempt to reverse-engineer, scrape, or exploit the Service's analysis capabilities beyond their intended use</li>
+      <li>Submit automated or bulk requests that exceed normal human usage patterns without prior written agreement</li>
+      <li>Conduct load testing or stress testing against the Service</li>
+      <li>Interfere with the security or integrity of the Service</li>
+    </ul>
+    <p>Violation of these prohibitions may result in termination of your migration request without refund, at our sole discretion.</p>
+
+    <h2 id="s13">13. Service Availability</h2>
+    <p>The Service is provided on an "as available" basis. We do not guarantee continuous, uninterrupted availability. The Service may be unavailable due to maintenance, capacity limits, network issues, or circumstances beyond our control.</p>
+    <p>We reserve the right to suspend or terminate the Service at any time without notice. If the Service is permanently discontinued, we will make reasonable efforts to complete in-flight migrations and process refunds for paid orders not yet started.</p>
+
+    <h2 id="s14">14. Disclaimer of Warranties</h2>
+    <p><strong>THE SERVICE IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT, ACCURACY, OR COMPLETENESS.</strong></p>
+    <p>We do not warrant that:</p>
+    <ul>
+      <li>The Service will meet your requirements</li>
+      <li>Migrated contracts will be free of errors or will function identically to the originals</li>
+      <li>Storage state enumeration will be complete or 100% accurate</li>
+      <li>The Service will be available at any particular time</li>
+      <li>Results will be suitable for any particular purpose</li>
+      <li>Any third-party blockchain will accept or process our deployment transactions</li>
+    </ul>
+
+    <h2 id="s15">15. Limitation of Liability</h2>
+    <p><strong>TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, OUR TOTAL CUMULATIVE LIABILITY TO YOU FOR ANY CLAIM ARISING FROM OR RELATING TO THE SERVICE, THESE TERMS, OR ANY OUTPUT OF THE SERVICE SHALL NOT EXCEED ONE US DOLLAR ($1.00 USD).</strong></p>
+    <p>IN NO EVENT SHALL WE BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, PUNITIVE, OR EXEMPLARY DAMAGES, INCLUDING BUT NOT LIMITED TO LOSS OF PROFITS, LOSS OF DATA, LOSS OF BUSINESS, LOSS OF GOODWILL, LOSS OF CRYPTOCURRENCY ASSETS, OR COST OF SUBSTITUTE SERVICES, EVEN IF WE HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.</p>
+    <p>Some jurisdictions do not allow the exclusion of certain warranties or the limitation of liability. In such jurisdictions, our liability shall be limited to the maximum extent permitted by applicable law.</p>
+
+    <h2 id="s16">16. Indemnification</h2>
+    <p>You agree to defend, indemnify, and hold harmless the operator, its officers, employees, contractors, and agents from and against any claims, liabilities, damages, losses, and expenses (including reasonable legal fees) arising out of or in any way connected with:</p>
+    <ul>
+      <li>Your use of the Service</li>
+      <li>Your violation of these Terms</li>
+      <li>Your violation of any applicable law</li>
+      <li>Your infringement of any third-party intellectual property rights</li>
+      <li>Any harm caused by contracts you deploy using the Service</li>
+      <li>Any claim by a third party arising from your use of migrated contracts</li>
+    </ul>
+
+    <h2 id="s17">17. Third-Party Chains</h2>
+    <p>The destination blockchains (Ethereum, Base, Arbitrum, Optimism, Polygon, BNB Chain, and others) are independent networks operated by third parties. We have no control over their availability, security, fee structures, upgrade schedules, or continued operation.</p>
+    <p>We are not responsible for any changes to third-party blockchains that affect the functionality, availability, or value of contracts deployed through the Service. We are not responsible for network outages, reorgs, hard forks, or protocol changes on any blockchain.</p>
+    <p>Source chain RPCs are provided by third-party RPC services. We are not responsible for inaccurate or incomplete data provided by these services.</p>
+
+    <h2 id="s18">18. No Ongoing Relationship</h2>
+    <p>ChainClone is a one-shot service. Completion of a migration does not create any ongoing relationship, service agreement, support obligation, or duty of care between you and us. We have no obligation to:</p>
+    <ul>
+      <li>Maintain or update migrated contracts</li>
+      <li>Provide technical support for deployed contracts</li>
+      <li>Monitor deployed contracts</li>
+      <li>Notify you of issues with migrated contracts</li>
+      <li>Re-migrate contracts if the original changes</li>
+    </ul>
+    <p>Each migration is a standalone, completed transaction. Once results are delivered, our obligation to you is discharged.</p>
+
+    <h2 id="s19">19. Privacy and Data</h2>
+    <p>We do not collect personal information. You do not need to provide an email address, name, or any identifying information to use the Service.</p>
+    <p>We collect and process only the information necessary to perform the migration:</p>
+    <ul>
+      <li>Contract addresses you submit</li>
+      <li>Source chain and destination preferences</li>
+      <li>Your wallet address (recorded from the payment transaction on-chain)</li>
+      <li>Job status and results (retained for 30 days)</li>
+    </ul>
+    <p>All blockchain transactions are public by nature. Your wallet address and transaction hashes are permanently visible on-chain. We have no ability to remove this information.</p>
+    <p>We do not sell, rent, or share any information collected in connection with your migration with third parties, except as required by law or as necessary to process your payment (e.g., on-chain settlement).</p>
+
+    <h2 id="s20">20. Blockchain Data</h2>
+    <p>All contract data we access is publicly available on-chain. We do not access private keys, wallets, or off-chain private data. By using the Service, you acknowledge that:</p>
+    <ul>
+      <li>All on-chain data we read is publicly available to anyone</li>
+      <li>Blockchain data is immutable — once a transaction is confirmed, it cannot be reversed</li>
+      <li>Smart contract storage is publicly readable — any "private" variables in Solidity are not actually private on-chain</li>
+    </ul>
+
+    <h2 id="s21">21. Technical Limitations</h2>
+    <p>You acknowledge the following technical limitations of the Service:</p>
+    <ul>
+      <li>Storage enumeration may be incomplete for contracts with very large state (e.g., millions of token holders)</li>
+      <li>Contracts that have been self-destructed cannot be migrated</li>
+      <li>The Service cannot migrate transaction history, event logs, or off-chain data</li>
+      <li>External contract references within migrated bytecode will still point to source-chain addresses</li>
+      <li>The Service may not support all proxy patterns or contract standards</li>
+      <li>EVM bytecode version compatibility between source and destination chains is your responsibility to verify</li>
+    </ul>
+    <p>These limitations do not constitute grounds for refund beyond those specified in Section 7.</p>
+
+    <h2 id="s22">22. Modifications to Terms</h2>
+    <p>We reserve the right to modify these Terms at any time. Changes take effect immediately upon posting at chainclone.net/terms.html. Your continued use of the Service after changes are posted constitutes acceptance of the modified Terms.</p>
+    <p>For ongoing migration jobs, the Terms in effect at the time of payment govern that specific transaction.</p>
+
+    <h2 id="s23">23. Termination</h2>
+    <p>We may terminate or suspend your access to the Service, cancel a pending migration, or refuse service at any time, at our sole discretion, including but not limited to if we believe you have violated these Terms. In the event of termination of a paid pending migration, we will issue a refund in accordance with Section 7.</p>
+
+    <h2 id="s24">24. Dispute Resolution</h2>
+    <p>Any dispute, controversy, or claim arising out of or relating to these Terms or the Service shall be resolved by binding arbitration administered by the American Arbitration Association (AAA) under its Commercial Arbitration Rules. The arbitration shall be conducted in English. The place of arbitration shall be Wyoming, United States. Judgment on the arbitration award may be entered in any court of competent jurisdiction.</p>
+    <p>Before initiating arbitration, you agree to contact us via the dispute mechanism on your job results page and attempt to resolve the dispute informally for at least 30 days.</p>
+    <p>Notwithstanding the foregoing, either party may seek injunctive or other equitable relief from a court of competent jurisdiction to prevent irreparable harm pending arbitration.</p>
+
+    <h2 id="s25">25. Governing Law</h2>
+    <p>These Terms and any dispute arising from your use of the Service shall be governed by the laws of the State of Wyoming, United States, without regard to its conflict of law provisions.</p>
+
+    <h2 id="s26">26. Class Action Waiver</h2>
+    <p><strong>YOU AGREE THAT ANY DISPUTE RESOLUTION PROCEEDINGS WILL BE CONDUCTED ONLY ON AN INDIVIDUAL BASIS AND NOT IN A CLASS, CONSOLIDATED, OR REPRESENTATIVE ACTION.</strong> You waive any right to participate in a class action lawsuit or class-wide arbitration.</p>
+    <p>If any court or arbitrator determines that this class action waiver is unenforceable, then the arbitration agreement in Section 24 shall not apply, and any dispute shall be resolved in a court of competent jurisdiction in Wyoming.</p>
+
+    <h2 id="s27">27. Operator Information</h2>
+    <p>The Service is operated by:</p>
+    <p><strong>Mesa Operations LLC</strong><br>
+    30 N Gould St Ste R<br>
+    Sheridan, WY 82801<br>
+    United States</p>
+    <p>Mesa Operations LLC is a Wyoming limited liability company. The company name appears in these Terms solely for legal identification purposes and does not appear in any public-facing marketing materials.</p>
+
+    <h2 id="s28">28. Severability</h2>
+    <p>If any provision of these Terms is held to be invalid, illegal, or unenforceable, that provision shall be modified to the minimum extent necessary to make it enforceable, or severed if modification is not possible. The remaining provisions of these Terms shall continue in full force and effect.</p>
+
+    <h2 id="s29">29. Entire Agreement</h2>
+    <p>These Terms constitute the entire agreement between you and us regarding the Service and supersede all prior agreements, understandings, representations, and warranties, whether written or oral, relating to the Service. No waiver of any provision of these Terms shall be effective unless in writing. Our failure to enforce any right or provision of these Terms shall not constitute a waiver of that right or provision.</p>
+
+  </div>
+
+  <footer>
+    <a href="/">ChainClone</a> &nbsp;·&nbsp;
+    <a href="/migrate.html">Migrate</a> &nbsp;·&nbsp;
+    <a href="/docs.html">Docs</a>
+    <br><br>
+    © 2026 ChainClone. All rights reserved.
+  </footer>
 
 </body>
 </html>

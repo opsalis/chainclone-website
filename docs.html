@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documentation — ChainClone</title>
+  <meta name="description" content="ChainClone documentation. How contract migration works, what we migrate, supported chains, pricing, storage enumeration, and technical details.">
+  <link rel="canonical" href="https://chainclone.net/docs.html">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%237c3aed'/%3E%3Crect x='5' y='5' width='13' height='17' rx='2' fill='none' stroke='%23fff' stroke-width='1.8'/%3E%3Crect x='14' y='10' width='13' height='17' rx='2' fill='%237c3aed' stroke='%23fff' stroke-width='1.8'/%3E%3Cpath d='M17 14h7M17 18h7M17 22h4' stroke='%23fff' stroke-width='1.4' stroke-linecap='round'/%3E%3C/svg%3E">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://chainclone.net/docs.html">
+  <meta property="og:title" content="Documentation — ChainClone">
+  <meta property="og:description" content="Technical documentation for ChainClone contract migration service.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --purple: #7c3aed;
+      --purple-dim: #6d28d9;
+      --purple-light: #ede9fe;
+      --text: #1a1a2e;
+      --text-secondary: #555770;
+      --bg: #ffffff;
+      --bg-alt: #f7f8fc;
+      --border: #e4e7ec;
+      --green: #00b87a;
+      --radius: 10px;
+    }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; -webkit-font-smoothing: antialiased; }
+    code, .mono { font-family: 'JetBrains Mono', monospace; background: var(--bg-alt); padding: 2px 6px; border-radius: 4px; font-size: 0.85em; color: var(--purple); }
+    a { color: var(--purple); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    nav { background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 16px 0; position: sticky; top: 0; z-index: 100; }
+    nav .inner { max-width: 1120px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; }
+    .logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.25rem; letter-spacing: -0.5px; color: var(--text); }
+    .logo svg { width: 28px; height: 28px; }
+    .nav-links { display: flex; gap: 24px; font-size: 0.9rem; font-weight: 500; }
+    .nav-links a { color: var(--text-secondary); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; padding: 9px 18px; border-radius: var(--radius); font-weight: 600; font-size: 0.85rem; transition: all 0.2s; cursor: pointer; border: none; }
+    .btn-primary { background: var(--purple); color: #fff; }
+    .btn-primary:hover { background: var(--purple-dim); }
+
+    .layout { max-width: 1120px; margin: 0 auto; padding: 48px 24px 80px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; }
+    .sidebar { position: sticky; top: 80px; height: fit-content; }
+    .sidebar nav { background: none; border: none; padding: 0; position: static; }
+    .sidebar-title { font-size: 0.75rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; margin-top: 20px; }
+    .sidebar-title:first-child { margin-top: 0; }
+    .sidebar-link { display: block; font-size: 0.875rem; color: var(--text-secondary); padding: 5px 0; }
+    .sidebar-link:hover { color: var(--purple); text-decoration: none; }
+    .sidebar-link.active { color: var(--purple); font-weight: 600; }
+
+    .content h1 { font-size: 2rem; font-weight: 800; letter-spacing: -0.75px; margin-bottom: 8px; }
+    .content .meta { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 48px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+    .content h2 { font-size: 1.3rem; font-weight: 700; margin: 48px 0 16px; padding-top: 24px; color: var(--text); scroll-margin-top: 80px; }
+    .content h3 { font-size: 1rem; font-weight: 700; margin: 28px 0 10px; color: var(--text); }
+    .content p { margin-bottom: 14px; color: var(--text-secondary); font-size: 0.95rem; }
+    .content ul, .content ol { margin-bottom: 14px; padding-left: 24px; color: var(--text-secondary); font-size: 0.95rem; }
+    .content li { margin-bottom: 6px; }
+    strong { color: var(--text); font-weight: 600; }
+
+    .notice { background: #fdf4ff; border: 1px solid #e9d5ff; border-radius: 8px; padding: 14px 18px; font-size: 0.9rem; color: #6b21a8; margin: 20px 0; }
+    .warn-notice { background: #fff7ed; border: 1px solid #fed7aa; border-radius: 8px; padding: 14px 18px; font-size: 0.9rem; color: #92400e; margin: 20px 0; }
+    .success-notice { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 14px 18px; font-size: 0.9rem; color: #166534; margin: 20px 0; }
+
+    table { width: 100%; border-collapse: collapse; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin: 16px 0; font-size: 0.9rem; }
+    th { background: var(--bg-alt); padding: 10px 16px; text-align: left; font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border); }
+    td { padding: 12px 16px; border-bottom: 1px solid var(--border); color: var(--text-secondary); }
+    tr:last-child td { border-bottom: none; }
+    .price-cell { font-family: 'JetBrains Mono', monospace; font-weight: 600; color: var(--text); }
+    .free-cell { color: var(--green); font-weight: 700; }
+
+    footer { border-top: 1px solid var(--border); padding: 24px 0; text-align: center; font-size: 0.8rem; color: #94a3b8; }
+    footer a { color: #94a3b8; }
+
+    @media (max-width: 768px) {
+      .layout { grid-template-columns: 1fr; gap: 24px; }
+      .sidebar { position: static; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="inner">
+      <a href="/" class="logo">
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" rx="6" fill="#7c3aed"/>
+          <rect x="5" y="5" width="13" height="17" rx="2" fill="none" stroke="#fff" stroke-width="1.8"/>
+          <rect x="14" y="10" width="13" height="17" rx="2" fill="#7c3aed" stroke="#fff" stroke-width="1.8"/>
+          <path d="M17 14h7M17 18h7M17 22h4" stroke="#fff" stroke-width="1.4" stroke-linecap="round"/>
+        </svg>
+        <span>Chain<span style="color:var(--purple)">Clone</span></span>
+      </a>
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/migrate.html">Migrate</a>
+        <a href="/terms.html">Terms</a>
+      </div>
+      <a href="/migrate.html" class="btn btn-primary">Start migration</a>
+    </div>
+  </nav>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-title">Overview</div>
+      <a href="#what-we-migrate" class="sidebar-link">What we migrate</a>
+      <a href="#what-we-dont" class="sidebar-link">What we don't migrate</a>
+
+      <div class="sidebar-title">Technical</div>
+      <a href="#storage-enumeration" class="sidebar-link">Storage enumeration</a>
+      <a href="#proxy-contracts" class="sidebar-link">Proxy contracts</a>
+      <a href="#token-balances" class="sidebar-link">Token balances</a>
+
+      <div class="sidebar-title">Reference</div>
+      <a href="#supported-chains" class="sidebar-link">Supported chains</a>
+      <a href="#pricing" class="sidebar-link">Pricing</a>
+      <a href="#refund-policy" class="sidebar-link">Refund policy</a>
+      <a href="#free-sample" class="sidebar-link">Free sample</a>
+      <a href="#limitations" class="sidebar-link">Limitations</a>
+    </aside>
+
+    <div class="content">
+      <h1>Documentation</h1>
+      <div class="meta">Last updated: April 12, 2026</div>
+
+      <h2 id="what-we-migrate">What we migrate</h2>
+      <p>ChainClone creates a complete, deployable copy of any EVM smart contract from any supported source chain. Here is exactly what is included:</p>
+
+      <h3>Bytecode</h3>
+      <p>We extract the deployed bytecode from the source chain using <code>eth_getCode</code>. This is the compiled, binary representation of the contract logic. The copy is bit-for-bit identical to the original — same function selectors, same opcodes, same ABI.</p>
+
+      <h3>Storage state</h3>
+      <p>Smart contract storage is a key-value store of 32-byte slots. We enumerate all non-zero storage slots using a combination of strategies (see <a href="#storage-enumeration">Storage enumeration</a>) and include all discovered values in the migration output. This preserves balances, ownership mappings, counters, and any other state variables.</p>
+
+      <h3>Native balance</h3>
+      <p>If the contract holds native currency (ETH, BNB, MATIC, etc.), we record the balance and include the same amount in the migration output. Note: for paid on-chain deployments, we pre-fund the destination contract with the equivalent amount; you are responsible for ensuring the funding is correct.</p>
+
+      <h3>Constructor arguments</h3>
+      <p>We infer constructor arguments from the deployment transaction on the source chain (where available from block explorers or verified source). These are used to produce a clean redeployment on the destination chain.</p>
+
+      <h3>Proxy and implementation pairs</h3>
+      <p>Upgradeable proxy contracts (EIP-1967, OpenZeppelin Transparent Proxy, UUPS, Beacon Proxy) are detected automatically. Both the proxy and its current implementation are included in the migration output, with proper initialization data.</p>
+
+      <h3>Token balances (ERC-20, ERC-721, ERC-1155)</h3>
+      <p>For token contracts, we enumerate the full balance mapping from storage slots. This means all holder balances are preserved in the cloned contract. See <a href="#token-balances">Token balances</a> for details and limitations.</p>
+
+      <hr style="border: none; border-top: 1px solid var(--border); margin: 32px 0;">
+
+      <h2 id="what-we-dont">What we don't migrate</h2>
+      <p>Some data is structurally impossible or deliberately excluded from migration:</p>
+      <ul>
+        <li><strong>Transaction history</strong> — past transactions are recorded on the source chain's ledger, not in the contract itself. The cloned contract starts with zero transaction history.</li>
+        <li><strong>Event logs</strong> — events are emitted during transactions and stored in block receipts, not in contract storage. They are not part of the contract state.</li>
+        <li><strong>External contract references</strong> — if the contract stores addresses of other contracts (e.g., <code>address public owner = 0xABC...</code>), those stored addresses still point to the source chain. You must update them manually after migration.</li>
+        <li><strong>Off-chain data and oracles</strong> — any data that the contract reads from external sources (Chainlink feeds, IPFS CIDs, etc.) must be reconfigured for the destination chain.</li>
+        <li><strong>Bridge positions</strong> — tokens or assets locked in cross-chain bridges are not migrated.</li>
+        <li><strong>Gas price history</strong> — not part of contract state.</li>
+      </ul>
+
+      <div class="warn-notice">
+        <strong>Important:</strong> You are responsible for verifying that the migrated contract functions correctly on the destination chain. ChainClone provides the raw migration — testing and validation are your responsibility.
+      </div>
+
+      <h2 id="storage-enumeration">Storage enumeration</h2>
+      <p>Enumerating all storage slots in a deployed contract is a non-trivial problem — EVM contracts can theoretically use any of 2<sup>256</sup> possible storage slots. We use several complementary strategies:</p>
+
+      <h3>Strategy 1: Verified source code analysis</h3>
+      <p>If the contract is verified on a block explorer (Etherscan, Basescan, etc.), we parse the source code to determine the storage layout — exactly which slots correspond to which variables. This is the most accurate method.</p>
+
+      <h3>Strategy 2: Sequential scan</h3>
+      <p>We scan slots 0 through N (default: first 1,000 slots) using <code>eth_getStorageAt</code>. This catches all simple state variables, arrays (at their base slots), and fixed-size mappings.</p>
+
+      <h3>Strategy 3: Event-driven slot discovery</h3>
+      <p>We replay relevant events (Transfer, Approval, Deposit, etc.) from the contract's history to discover mapping keys. For ERC-20 contracts, for example, every Transfer event reveals a holder's address, which we use to compute the corresponding storage slot.</p>
+
+      <h3>Strategy 4: Known slot patterns</h3>
+      <p>ERC-20 balance mappings are always stored at <code>keccak256(address . slot)</code>. ERC-721 owners at <code>keccak256(tokenId . slot)</code>. We recognize these patterns for all major token standards and enumerate them directly.</p>
+
+      <div class="notice">
+        <strong>Coverage:</strong> For most ERC-20 and ERC-721 contracts with fewer than 10,000 holders, we achieve near-100% storage coverage. For contracts with millions of holders (USDC, USDT, etc.), complete enumeration is computationally expensive and may take significant time. Contact us for large-scale migrations.
+      </div>
+
+      <h2 id="proxy-contracts">Proxy contracts</h2>
+      <p>We detect the following proxy patterns automatically:</p>
+      <ul>
+        <li><strong>EIP-1967 Transparent Proxy</strong> — implementation slot at <code>0x360894...</code></li>
+        <li><strong>EIP-1967 Beacon Proxy</strong> — beacon slot at <code>0xa3f0ad74...</code></li>
+        <li><strong>UUPS (Universal Upgradeable Proxy Standard)</strong></li>
+        <li><strong>OpenZeppelin TransparentUpgradeableProxy</strong></li>
+        <li><strong>Gnosis Safe Proxy</strong></li>
+        <li><strong>Minimal proxy (EIP-1167 clones)</strong></li>
+      </ul>
+      <p>For each proxy, both the proxy contract and its current implementation are included in the migration. The proxy's storage (including the stored implementation address) is updated to point to the new implementation address on the destination chain.</p>
+
+      <h2 id="token-balances">Token balances</h2>
+      <p>Token balance migration works differently depending on the standard:</p>
+
+      <h3>ERC-20</h3>
+      <p>Balance storage is at <code>keccak256(abi.encode(holder_address, balanceOf_slot))</code>. We enumerate all holders from Transfer events and reconstruct the full balance mapping. Total supply is preserved.</p>
+
+      <h3>ERC-721</h3>
+      <p>Token ownership is stored at <code>keccak256(abi.encode(tokenId, owners_slot))</code>. We enumerate all token IDs from Transfer events. The <code>balanceOf</code> mapping is reconstructed from ownership data.</p>
+
+      <h3>ERC-1155</h3>
+      <p>The multi-token balance mapping is at <code>keccak256(abi.encode(tokenId, keccak256(abi.encode(holder, balances_slot))))</code>. We enumerate from TransferSingle and TransferBatch events.</p>
+
+      <h2 id="supported-chains">Supported chains</h2>
+      <p>The following chains are supported as source chains (we can read contracts from these):</p>
+      <table>
+        <thead><tr><th>Chain</th><th>Chain ID</th><th>RPC source</th></tr></thead>
+        <tbody>
+          <tr><td>Ethereum Mainnet</td><td>1</td><td>Public RPCs + ChainRPC</td></tr>
+          <tr><td>Base</td><td>8453</td><td>Public RPCs + ChainRPC</td></tr>
+          <tr><td>Arbitrum One</td><td>42161</td><td>Public RPCs + ChainRPC</td></tr>
+          <tr><td>Optimism</td><td>10</td><td>Public RPCs + ChainRPC</td></tr>
+          <tr><td>Polygon</td><td>137</td><td>Public RPCs + ChainRPC</td></tr>
+          <tr><td>BNB Chain</td><td>56</td><td>Public RPCs + ChainRPC</td></tr>
+          <tr><td>Avalanche C-Chain</td><td>43114</td><td>Public RPCs + ChainRPC</td></tr>
+          <tr><td>Custom RPC</td><td>Any EVM</td><td>Your endpoint</td></tr>
+        </tbody>
+      </table>
+      <p>Destination chains (we can deploy to these):</p>
+      <table>
+        <thead><tr><th>Destination</th><th>Price per contract</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>L2aaS (your own chain)</td><td class="free-cell">Free</td><td>Import as genesis allocation or live deployment</td></tr>
+          <tr><td>Export ZIP</td><td class="price-cell">$47.50 USDC</td><td>Deploy anywhere yourself</td></tr>
+          <tr><td>Base / Arbitrum / Optimism / Polygon</td><td class="price-cell">$97.53 USDC</td><td>We deploy on-chain for you</td></tr>
+          <tr><td>BNB Chain</td><td class="price-cell">$31.17 USDC</td><td>We deploy on-chain for you</td></tr>
+          <tr><td>Ethereum L1</td><td class="price-cell">$478.21 USDC</td><td>Includes mainnet gas budget</td></tr>
+        </tbody>
+      </table>
+
+      <h2 id="pricing">Pricing</h2>
+      <p>Pricing is per contract. Volume discounts apply automatically to all contracts in a single order:</p>
+      <table>
+        <thead><tr><th>Order size</th><th>Discount</th></tr></thead>
+        <tbody>
+          <tr><td>1–4 contracts</td><td>No discount</td></tr>
+          <tr><td>5–9 contracts</td><td>5% off</td></tr>
+          <tr><td>10–19 contracts</td><td>10% off</td></tr>
+          <tr><td>20–49 contracts</td><td>20% off</td></tr>
+          <tr><td>50–99 contracts</td><td>30% off</td></tr>
+          <tr><td>100+ contracts</td><td>40% off</td></tr>
+        </tbody>
+      </table>
+      <p>Payment is in USDC or USDT via your wallet. Payment is verified on-chain before migration begins.</p>
+
+      <h2 id="refund-policy">Refund policy</h2>
+      <div class="warn-notice">
+        <strong>Gas costs are non-refundable.</strong> Any gas fees spent on the destination chain during a migration attempt cannot be recovered — they are burned on-chain. This is a fundamental property of blockchain networks, not a policy we can override.
+      </div>
+      <p>Our refund policy:</p>
+      <ul>
+        <li><strong>Migration not started:</strong> 100% refund if we haven't submitted any on-chain transaction yet.</li>
+        <li><strong>Migration failed after gas spent:</strong> Full refund minus the value of gas already consumed on the destination chain. We provide a detailed breakdown.</li>
+        <li><strong>Bad input from customer:</strong> No refund for invalid addresses, incompatible contract code, or source chains that become unavailable after payment.</li>
+        <li><strong>Partial completion:</strong> Refund for undeployed contracts only. Contracts already deployed are considered delivered.</li>
+      </ul>
+      <p>To request a refund, use the job URL from your results page. Refunds are processed within 48 hours to the same wallet that paid.</p>
+
+      <h2 id="free-sample">Free sample download</h2>
+      <p>Before paying, you can download a free sample for the first contract in your order. The sample ZIP contains:</p>
+      <ul>
+        <li><code>bytecode.hex</code> — the raw deployed bytecode</li>
+        <li><code>abi.json</code> — the contract ABI (if available from verified source)</li>
+        <li><code>storage-layout.json</code> — detected slot layout and variable types</li>
+        <li><code>analysis.txt</code> — summary: contract type, storage slots found, dependencies</li>
+      </ul>
+      <p>The sample does not include the full storage state dump (that requires payment). It is enough to verify that we correctly identified the contract and its structure, but not enough to deploy a functional clone on your own.</p>
+
+      <h2 id="limitations">Known limitations</h2>
+      <ul>
+        <li><strong>Very large contracts (>24 KB bytecode):</strong> EVM has a 24 KB bytecode size limit. Contracts near this limit may require special handling. We will flag these during analysis.</li>
+        <li><strong>Diamond proxies (EIP-2535):</strong> Complex multi-facet diamonds are detected but may require manual verification of facet addresses after migration.</li>
+        <li><strong>Self-destructed contracts:</strong> Contracts that have been self-destructed on the source chain cannot be cloned — the bytecode no longer exists.</li>
+        <li><strong>Cross-chain dependencies:</strong> Contracts that call other contracts by hardcoded address will still reference the source chain's addresses. You must update these manually.</li>
+        <li><strong>Custom revert strings and error data:</strong> Preserved in bytecode exactly — no changes needed.</li>
+        <li><strong>Immutable variables (Solidity immutables):</strong> Baked into the bytecode at deployment time — preserved exactly in the clone.</li>
+        <li><strong>Storage gaps:</strong> We only copy non-zero storage slots. Zero-value slots are the default and are not stored on the destination chain (they are equal to the default anyway).</li>
+      </ul>
+
+      <div style="margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--border); text-align: center;">
+        <p style="color: var(--text-secondary); margin-bottom: 16px;">Ready to migrate?</p>
+        <a href="/migrate.html" class="btn btn-primary" style="padding: 12px 28px; font-size: 1rem;">Start a migration →</a>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <a href="/">ChainClone</a> &nbsp;·&nbsp;
+    <a href="/migrate.html">Migrate</a> &nbsp;·&nbsp;
+    <a href="/terms.html">Terms</a>
+    <br><br>
+    © 2026 ChainClone. All rights reserved.
+  </footer>
+
+</body>
+</html>

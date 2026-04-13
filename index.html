@@ -4,804 +4,443 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ChainClone — Clone Any Blockchain to Yours</title>
-  <meta name="description" content="Migrate smart contracts, state, and balances between EVM chains. Clone any blockchain to your own chain in minutes. Free migration to L2aaS chains.">
-  <meta name="keywords" content="blockchain migration, chain clone, smart contract migration, EVM migration, contract state transfer, blockchain cloning, cross-chain migration">
+  <meta name="description" content="Clone any EVM smart contract to your blockchain in minutes. Migrate bytecode, storage state, and balances. Free migration to L2aaS chains. Pay once, no account needed.">
+  <meta name="keywords" content="blockchain migration, clone smart contract, EVM migration, contract migration, L2 migration, Ethereum clone, Base migration, chain clone">
   <link rel="canonical" href="https://chainclone.net/">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x1F9EC;</text></svg>">
-  <!-- Open Graph -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%237c3aed'/%3E%3Crect x='5' y='5' width='14' height='18' rx='2' fill='none' stroke='%23fff' stroke-width='2'/%3E%3Crect x='13' y='9' width='14' height='18' rx='2' fill='%237c3aed' stroke='%23fff' stroke-width='2'/%3E%3Cpath d='M16 12h8M16 16h8M16 20h5' stroke='%23fff' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://chainclone.net/">
   <meta property="og:title" content="ChainClone — Clone Any Blockchain to Yours">
-  <meta property="og:description" content="Migrate smart contracts, storage state, and balances between EVM chains. Free migration to L2aaS chains.">
-  <meta property="og:image" content="https://chainclone.net/og-image.png">
-  <!-- Twitter Card -->
+  <meta property="og:description" content="Clone any EVM smart contract to your blockchain in minutes. Bytecode, storage, balances. Free to L2aaS.">
+  <meta property="og:site_name" content="ChainClone">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="ChainClone — Clone Any Blockchain to Yours">
-  <meta name="twitter:description" content="Migrate smart contracts, storage state, and balances between EVM chains. Free migration to L2aaS chains.">
-  <meta name="twitter:image" content="https://chainclone.net/og-image.png">
+  <meta name="twitter:description" content="Clone any EVM smart contract to your blockchain in minutes. No account needed. Pay once, get results.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            brand: { DEFAULT: '#6366f1', dark: '#4f46e5', light: '#e0e7ff', 50: '#eef2ff' },
-          }
-        }
-      }
-    }
-  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
-    .btn-primary { background-color: #6366f1; color: #fff; }
-    .btn-primary:hover { background-color: #4f46e5; transform: translateY(-1px); }
-    .btn-primary { transition: all 0.2s ease; }
-    .btn-outline { border: 2px solid #6366f1; color: #6366f1; }
-    .btn-outline:hover { background-color: #eef2ff; }
-    .btn-outline { transition: all 0.2s ease; }
-    .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
-    .faq-answer.open { max-height: 500px; }
-    .faq-toggle svg { transition: transform 0.2s ease; }
-    .faq-toggle.open svg { transform: rotate(180deg); }
-    .mobile-menu { display: none; }
-    .mobile-menu.open { display: flex; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --purple: #7c3aed;
+      --purple-dim: #6d28d9;
+      --purple-light: #ede9fe;
+      --purple-glow: rgba(124, 58, 237, 0.06);
+      --text: #1a1a2e;
+      --text-secondary: #555770;
+      --bg: #ffffff;
+      --bg-alt: #f7f8fc;
+      --border: #e4e7ec;
+      --green: #00b87a;
+      --radius: 10px;
+    }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    code, pre, .mono { font-family: 'JetBrains Mono', monospace; }
+    a { color: inherit; text-decoration: none; }
+    .container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+
+    /* Nav */
+    nav { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    nav .inner { display: flex; align-items: center; justify-content: space-between; padding: 16px 0; }
+    .logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.25rem; letter-spacing: -0.5px; }
+    .logo svg { width: 32px; height: 32px; }
+    .nav-links { display: flex; align-items: center; gap: 32px; font-size: 0.9rem; font-weight: 500; color: var(--text-secondary); }
+    .nav-links a:hover { color: var(--text); }
+    .btn { display: inline-flex; align-items: center; justify-content: center; padding: 10px 22px; border-radius: var(--radius); font-weight: 600; font-size: 0.9rem; transition: all 0.2s; cursor: pointer; border: none; font-family: inherit; }
+    .btn-primary { background: var(--purple); color: #fff; }
+    .btn-primary:hover { background: var(--purple-dim); transform: translateY(-1px); box-shadow: 0 4px 20px rgba(124, 58, 237, 0.3); }
+    .btn-outline { border: 1.5px solid var(--border); color: var(--text-secondary); background: transparent; }
+    .btn-outline:hover { border-color: var(--purple); color: var(--purple); }
+
+    /* Hero */
+    .hero { padding: 80px 0 40px; text-align: center; position: relative; overflow: hidden; }
+    .hero::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle at 50% 50%, var(--purple-glow) 0%, transparent 50%); pointer-events: none; }
+    .hero h1 { font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 800; letter-spacing: -1.5px; line-height: 1.1; margin-bottom: 20px; position: relative; color: var(--text); }
+    .hero h1 .accent { color: var(--purple); }
+    .hero p { font-size: 1.15rem; color: var(--text-secondary); max-width: 560px; margin: 0 auto 36px; }
+    .hero-buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 56px; }
+
+    /* Stats bar */
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 72px; }
+    .stat { background: var(--bg); padding: 24px; text-align: center; }
+    .stat-value { font-size: 1.75rem; font-weight: 700; color: var(--text); }
+    .stat-label { font-size: 0.8rem; color: var(--text-secondary); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    /* How it works */
+    .section { padding: 80px 0; }
+    .section-title { font-size: 2rem; font-weight: 700; margin-bottom: 12px; letter-spacing: -0.5px; color: var(--text); }
+    .section-sub { color: var(--text-secondary); margin-bottom: 48px; font-size: 1.05rem; }
+
+    .steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+    .step-card { background: var(--bg); border: 1px solid var(--border); border-radius: 16px; padding: 32px; position: relative; }
+    .step-num { width: 40px; height: 40px; background: var(--purple-light); color: var(--purple); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.1rem; margin-bottom: 16px; }
+    .step-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; color: var(--text); }
+    .step-card p { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; }
+
+    /* Pricing */
+    .pricing-table { width: 100%; border-collapse: collapse; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
+    .pricing-table th { background: var(--bg-alt); padding: 14px 20px; text-align: left; font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border); }
+    .pricing-table td { padding: 16px 20px; border-bottom: 1px solid var(--border); font-size: 0.95rem; }
+    .pricing-table tr:last-child td { border-bottom: none; }
+    .pricing-table tr:hover td { background: var(--bg-alt); }
+    .pricing-table .price { font-weight: 700; font-family: 'JetBrains Mono', monospace; color: var(--text); }
+    .pricing-table .free { color: var(--green); font-weight: 700; }
+    .badge-dest { display: inline-flex; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 500; }
+    .chain-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--purple); flex-shrink: 0; }
+    .chain-dot.green { background: var(--green); }
+
+    .discount-table { width: 100%; border-collapse: collapse; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); margin-top: 24px; }
+    .discount-table th { background: var(--bg-alt); padding: 12px 20px; text-align: left; font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border); }
+    .discount-table td { padding: 12px 20px; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+    .discount-table tr:last-child td { border-bottom: none; }
+    .discount-pct { font-weight: 700; color: var(--green); }
+
+    /* Chains */
+    .chains-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
+    .chain-card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 20px; display: flex; align-items: center; gap: 12px; transition: all 0.2s; }
+    .chain-card:hover { border-color: var(--purple); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(124, 58, 237, 0.08); }
+    .chain-name { font-weight: 600; font-size: 0.9rem; color: var(--text); }
+    .chain-id { font-size: 0.72rem; color: var(--text-secondary); font-family: 'JetBrains Mono', monospace; }
+
+    /* FAQ */
+    .faq { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+    .faq-item { border-bottom: 1px solid var(--border); }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-q { padding: 20px 24px; font-weight: 600; font-size: 0.95rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 16px; transition: background 0.15s; user-select: none; }
+    .faq-q:hover { background: var(--bg-alt); }
+    .faq-q svg { flex-shrink: 0; color: var(--text-secondary); transition: transform 0.2s; }
+    .faq-q.open svg { transform: rotate(180deg); }
+    .faq-a { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+    .faq-a.open { max-height: 400px; }
+    .faq-a-inner { padding: 0 24px 20px; color: var(--text-secondary); font-size: 0.9rem; line-height: 1.7; }
+
+    /* CTA band */
+    .cta-band { background: var(--purple); border-radius: 20px; padding: 60px 48px; text-align: center; margin: 80px 0; }
+    .cta-band h2 { font-size: 2rem; font-weight: 800; color: #fff; margin-bottom: 12px; letter-spacing: -0.5px; }
+    .cta-band p { color: rgba(255,255,255,0.75); font-size: 1.05rem; margin-bottom: 28px; }
+    .cta-band .btn-white { background: #fff; color: var(--purple); font-weight: 700; padding: 14px 32px; font-size: 1rem; }
+    .cta-band .btn-white:hover { background: #f3f0ff; transform: translateY(-1px); box-shadow: 0 6px 24px rgba(0,0,0,0.2); }
+
+    /* Footer */
+    footer { border-top: 1px solid var(--border); padding: 40px 0; margin-top: 0; }
+    footer .inner { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+    footer .links { display: flex; gap: 24px; font-size: 0.85rem; color: var(--text-secondary); }
+    footer .links a:hover { color: var(--text); }
+    footer .copy { font-size: 0.8rem; color: #94a3b8; }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      .hero { padding: 60px 0 32px; }
+      .cta-band { padding: 40px 24px; }
+      .pricing-table th:nth-child(3), .pricing-table td:nth-child(3) { display: none; }
+    }
   </style>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     "name": "ChainClone",
-    "description": "Clone any blockchain to yours. Migrate smart contracts, storage state, and balances between EVM chains.",
+    "description": "Clone any EVM smart contract to your blockchain. Bytecode, storage state, and balances migrated. Free to L2aaS chains.",
     "url": "https://chainclone.net",
     "applicationCategory": "DeveloperApplication",
     "operatingSystem": "Any",
     "offers": [
-      {
-        "@type": "Offer",
-        "name": "Free — L2aaS Migration",
-        "price": "0",
-        "priceCurrency": "USD",
-        "description": "Migrate contracts and state to your L2aaS blockchain for free"
-      },
-      {
-        "@type": "Offer",
-        "name": "Paid — Any EVM Chain",
-        "price": "5",
-        "priceCurrency": "USD",
-        "description": "Volume-based pricing from $5. Migrate contracts and state to any EVM chain — Base, Polygon, Arbitrum, Ethereum"
-      }
-    ]
-  }
-  </script>
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "Is this legal?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Yes. All blockchain data is public by design. We read publicly available on-chain state — contract bytecode, storage slots, and account balances. No private data is accessed."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Will contract addresses change?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Yes. Contracts are deployed fresh on the destination chain, so they receive new addresses. We provide a full mapping of old-to-new addresses after migration."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "How long does migration take?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Simple contracts migrate in minutes. Complex deployments with many dependencies can take a few hours. We provide real-time progress updates."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "What about contract dependencies?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Contracts that reference other contracts need all dependencies migrated together. We analyze the dependency graph and migrate everything in the correct order."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Do I get the source code?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Yes. For verified contracts, you get the original Solidity. For unverified contracts, we decompile the bytecode into readable pseudo-Solidity. Raw bytecode is always included. This is free — no extra charge."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Can I modify the source before deploying?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Yes. When importing on L2aaS, you can view and edit the source code before deploying to your chain. Change parameters, rename tokens, adjust logic — then compile and deploy."
-        }
-      }
+      { "@type": "Offer", "name": "L2aaS migration", "price": "0", "priceCurrency": "USD" },
+      { "@type": "Offer", "name": "ZIP export", "price": "47.50", "priceCurrency": "USD", "description": "Per contract" },
+      { "@type": "Offer", "name": "L2 chains (Base, Arbitrum, Optimism, Polygon)", "price": "97.53", "priceCurrency": "USD", "description": "Per contract" },
+      { "@type": "Offer", "name": "Ethereum L1", "price": "478.21", "priceCurrency": "USD", "description": "Per contract" },
+      { "@type": "Offer", "name": "BNB Chain", "price": "31.17", "priceCurrency": "USD", "description": "Per contract" }
     ]
   }
   </script>
 </head>
-<body class="bg-white text-gray-900 antialiased">
+<body>
 
-  <!-- Nav -->
-  <nav class="border-b border-gray-200 bg-white/90 backdrop-blur-md sticky top-0 z-50">
-    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-      <a href="/" class="text-xl font-bold tracking-tight">
-        <span class="text-indigo-600">Chain</span><span class="text-gray-900">Clone</span>
+  <nav>
+    <div class="container inner">
+      <a href="/" class="logo">
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" rx="6" fill="#7c3aed"/>
+          <rect x="5" y="5" width="13" height="17" rx="2" fill="none" stroke="#fff" stroke-width="1.8"/>
+          <rect x="14" y="10" width="13" height="17" rx="2" fill="#7c3aed" stroke="#fff" stroke-width="1.8"/>
+          <path d="M17 14h7M17 18h7M17 22h4" stroke="#fff" stroke-width="1.4" stroke-linecap="round"/>
+        </svg>
+        <span>Chain<span style="color:var(--purple)">Clone</span></span>
       </a>
-      <div class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-600">
-        <a href="#how-it-works" class="hover:text-gray-900 transition">How It Works</a>
-        <a href="#pricing" class="hover:text-gray-900 transition">Pricing</a>
-        <a href="#what-we-migrate" class="hover:text-gray-900 transition">What We Migrate</a>
-        <a href="#source-recovery" class="hover:text-gray-900 transition">Source Recovery</a>
-        <a href="#faq" class="hover:text-gray-900 transition">FAQ</a>
-        <a href="/terms.html" class="hover:text-gray-900 transition">Terms</a>
+      <div class="nav-links">
+        <a href="#how-it-works">How it works</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#chains">Chains</a>
+        <a href="/docs.html">Docs</a>
+        <a href="/terms.html">Terms</a>
       </div>
-      <div class="flex items-center gap-3">
-        <button id="navConnectBtn" onclick="connectWallet()" class="text-sm font-semibold px-4 py-2 rounded-lg border-2 border-indigo-600 text-indigo-600 hover:bg-indigo-50 transition">
-          Connect Wallet
-        </button>
-        <a href="#start" class="btn-primary text-sm font-semibold px-5 py-2.5 rounded-lg shadow-sm">
-          Start Migration
-        </a>
-        <button aria-label="Toggle mobile menu" onclick="document.getElementById('mobile-nav').classList.toggle('open')" class="md:hidden p-2 text-gray-600 hover:text-gray-900">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
-        </button>
-      </div>
-    </div>
-    <div id="mobile-nav" class="mobile-menu flex-col gap-2 px-6 pb-4 md:hidden text-sm font-medium text-gray-600">
-      <a href="#how-it-works" class="py-2 hover:text-gray-900 transition">How It Works</a>
-      <a href="#pricing" class="py-2 hover:text-gray-900 transition">Pricing</a>
-      <a href="#what-we-migrate" class="py-2 hover:text-gray-900 transition">What We Migrate</a>
-      <a href="#source-recovery" class="py-2 hover:text-gray-900 transition">Source Recovery</a>
-      <a href="#faq" class="py-2 hover:text-gray-900 transition">FAQ</a>
-      <a href="/terms.html" class="py-2 hover:text-gray-900 transition">Terms</a>
+      <a href="/migrate.html" class="btn btn-primary">Start Migration</a>
     </div>
   </nav>
 
-  <!-- Hero -->
-  <section class="bg-gradient-to-br from-indigo-50 via-white to-violet-50">
-    <div class="max-w-6xl mx-auto px-6 pt-24 pb-32 text-center">
-      <h1 class="text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-tight mb-6 text-gray-900">
-        Clone any blockchain<br>
-        <span class="text-indigo-600">to yours</span>
-      </h1>
-      <p class="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto mb-10 leading-relaxed">
-        Move contracts, state, and balances between EVM chains.
-        Read from Ethereum, Base, Polygon, Arbitrum, or Optimism &mdash;
-        deploy to any EVM chain. Done in minutes.
-      </p>
-      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-        <a href="#start" class="btn-primary text-base font-semibold px-8 py-3.5 rounded-xl shadow-md w-full sm:w-auto">
-          Start Your Migration &rarr;
-        </a>
-        <a href="#how-it-works" class="btn-outline text-base font-semibold px-8 py-3.5 rounded-xl w-full sm:w-auto">
-          How It Works
-        </a>
+  <main>
+    <!-- Hero -->
+    <section class="hero" id="top">
+      <div class="container">
+        <h1>Clone any contract<br>to <span class="accent">your blockchain</span></h1>
+        <p>Point us at any contract address. We read the bytecode, storage state, and balances — then deploy an exact copy on the chain you choose. No account. No subscription. Pay once, get your clone.</p>
+        <div class="hero-buttons">
+          <a href="/migrate.html" class="btn btn-primary" style="padding: 14px 32px; font-size: 1rem;">Start a migration →</a>
+          <a href="#how-it-works" class="btn btn-outline" style="padding: 14px 24px; font-size: 1rem;">See how it works</a>
+        </div>
       </div>
-      <p class="text-xs text-gray-500 mt-6">Free migration to L2aaS chains. Paid plans from $500. Pay with Visa, Mastercard, or USDC.</p>
-    </div>
-  </section>
+    </section>
 
-  <!-- How It Works -->
-  <section id="how-it-works" class="py-24 border-t border-gray-100">
-    <div class="max-w-6xl mx-auto px-6">
-      <div class="text-center mb-16">
-        <h2 class="text-3xl md:text-4xl font-bold mb-4 text-gray-900">How it works</h2>
-        <p class="text-gray-600 max-w-xl mx-auto">Three steps. No downtime on the source chain. No keys required.</p>
-      </div>
-      <div class="grid md:grid-cols-3 gap-8">
-        <div class="bg-white border border-gray-200 rounded-2xl p-8 shadow-sm hover:shadow-md transition">
-          <div class="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center mb-5">
-            <span class="text-indigo-600 font-bold text-xl">1</span>
-          </div>
-          <h3 class="text-lg font-semibold mb-2 text-gray-900">Tell us what to clone</h3>
-          <p class="text-gray-600 text-sm leading-relaxed">Provide the source chain and the contract addresses you want to migrate. We read everything on-chain &mdash; no access keys needed.</p>
-        </div>
-        <div class="bg-white border border-gray-200 rounded-2xl p-8 shadow-sm hover:shadow-md transition">
-          <div class="w-12 h-12 rounded-xl bg-violet-50 flex items-center justify-center mb-5">
-            <span class="text-violet-600 font-bold text-xl">2</span>
-          </div>
-          <h3 class="text-lg font-semibold mb-2 text-gray-900">Choose your destination</h3>
-          <p class="text-gray-600 text-sm leading-relaxed">Migrate to your L2aaS blockchain for free, or choose any EVM chain &mdash; Base, Polygon, Arbitrum, Ethereum &mdash; for a flat fee.</p>
-        </div>
-        <div class="bg-white border border-gray-200 rounded-2xl p-8 shadow-sm hover:shadow-md transition">
-          <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center mb-5">
-            <span class="text-emerald-600 font-bold text-xl">3</span>
-          </div>
-          <h3 class="text-lg font-semibold mb-2 text-gray-900">We deploy it &mdash; done</h3>
-          <p class="text-gray-600 text-sm leading-relaxed">We read the bytecode, storage state, and balances, then deploy everything on the destination chain. You get a full address mapping when it is complete.</p>
-        </div>
+    <!-- Stats -->
+    <div class="container">
+      <div class="stats">
+        <div class="stat"><div class="stat-value">8</div><div class="stat-label">Source chains</div></div>
+        <div class="stat"><div class="stat-value">Free</div><div class="stat-label">to L2aaS</div></div>
+        <div class="stat"><div class="stat-value">100%</div><div class="stat-label">Bytecode exact</div></div>
+        <div class="stat"><div class="stat-value">No</div><div class="stat-label">Account needed</div></div>
       </div>
     </div>
-  </section>
 
-  <!-- Pricing -->
-  <section id="pricing" class="py-24 bg-gray-50 border-t border-gray-100">
-    <div class="max-w-6xl mx-auto px-6">
-      <div class="text-center mb-16">
-        <h2 class="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Transparent Volume-Based Pricing</h2>
-        <p class="text-gray-600 max-w-xl mx-auto">Pay for what you extract. Price based on data volume, not contract count. Free for L2aaS customers.</p>
-      </div>
-
-      <!-- Volume pricing breakdown -->
-      <div class="max-w-2xl mx-auto mb-16">
-        <div class="bg-white border border-gray-200 rounded-2xl p-8 shadow-sm">
-          <h3 class="text-lg font-bold mb-4 text-gray-900">How pricing works</h3>
-          <table class="w-full text-sm">
-            <thead>
-              <tr class="border-b border-gray-100">
-                <th class="text-left py-2 text-gray-600 font-medium">Component</th>
-                <th class="text-right py-2 text-gray-600 font-medium">Price</th>
-              </tr>
-            </thead>
-            <tbody class="text-gray-700">
-              <tr class="border-b border-gray-50"><td class="py-2">Base fee per contract</td><td class="text-right font-semibold">$5</td></tr>
-              <tr class="border-b border-gray-50"><td class="py-2">Storage data</td><td class="text-right font-semibold">$2 per MB</td></tr>
-              <tr class="border-b border-gray-50"><td class="py-2">Bytecode</td><td class="text-right font-semibold">$1 per MB</td></tr>
-              <tr class="border-b border-gray-50"><td class="py-2">Source code recovery</td><td class="text-right font-semibold">Free (included)</td></tr>
-              <tr><td class="py-2">Minimum charge</td><td class="text-right font-semibold">$5</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="bg-white border border-gray-200 rounded-2xl p-8 shadow-sm mt-4">
-          <h3 class="text-lg font-bold mb-4 text-gray-900">Example costs</h3>
-          <table class="w-full text-sm">
-            <thead>
-              <tr class="border-b border-gray-100">
-                <th class="text-left py-2 text-gray-600 font-medium">Contract type</th>
-                <th class="text-right py-2 text-gray-600 font-medium">Data size</th>
-                <th class="text-right py-2 text-gray-600 font-medium">Cost</th>
-              </tr>
-            </thead>
-            <tbody class="text-gray-700">
-              <tr class="border-b border-gray-50"><td class="py-2">Simple ERC-20 token</td><td class="text-right">~55 KB</td><td class="text-right font-semibold">~$5</td></tr>
-              <tr class="border-b border-gray-50"><td class="py-2">NFT collection (ERC-721)</td><td class="text-right">~200 KB</td><td class="text-right font-semibold">~$5</td></tr>
-              <tr class="border-b border-gray-50"><td class="py-2">DeFi protocol (medium)</td><td class="text-right">~5 MB</td><td class="text-right font-semibold">~$15</td></tr>
-              <tr><td class="py-2">Large protocol (Uniswap-scale)</td><td class="text-right">~500 MB</td><td class="text-right font-semibold">~$1,000</td></tr>
-            </tbody>
-          </table>
-          <p class="text-xs text-gray-500 mt-4">You always see the exact cost before confirming. No surprises.</p>
-        </div>
-      </div>
-
-      <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-        <!-- Free tier -->
-        <div class="bg-white border-2 border-indigo-200 rounded-2xl p-8 shadow-sm relative">
-          <div class="absolute -top-3 left-8">
-            <span class="bg-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">Free</span>
+    <!-- How it works -->
+    <section id="how-it-works" class="section">
+      <div class="container">
+        <h2 class="section-title">How it works</h2>
+        <p class="section-sub">Three steps from contract address to deployed clone.</p>
+        <div class="steps-grid">
+          <div class="step-card">
+            <div class="step-num">1</div>
+            <h3>Paste contract addresses</h3>
+            <p>Give us the source chain and one or more contract addresses. We handle Ethereum, Base, Arbitrum, Optimism, Polygon, BNB Chain — or any custom RPC endpoint.</p>
           </div>
-          <h3 class="text-2xl font-bold mb-2 text-gray-900 mt-2">L2aaS Migration</h3>
-          <div class="text-4xl font-extrabold text-indigo-600 mb-4">$0</div>
-          <p class="text-gray-600 text-sm mb-6 leading-relaxed">Extract YOUR contracts and state for free. Output as encrypted .l2aas file for import into your L2aaS blockchain.</p>
-          <ul class="space-y-3 text-sm text-gray-700 mb-8">
-            <li class="flex items-start gap-2">
-              <svg class="w-5 h-5 text-indigo-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-              Limited to contracts you own or deployed
-            </li>
-            <li class="flex items-start gap-2">
-              <svg class="w-5 h-5 text-indigo-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-              Max 50 contracts per extraction
-            </li>
-            <li class="flex items-start gap-2">
-              <svg class="w-5 h-5 text-indigo-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-              Max 10 MB data volume
-            </li>
-            <li class="flex items-start gap-2">
-              <svg class="w-5 h-5 text-indigo-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-              1 extraction per day per wallet
-            </li>
-            <li class="flex items-start gap-2">
-              <svg class="w-5 h-5 text-indigo-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-              Source code recovery included &mdash; no surcharge
-            </li>
-          </ul>
-          <a href="#start" class="btn-primary block text-center text-sm font-semibold px-6 py-3 rounded-lg shadow-sm">
-            Migrate Free
-          </a>
+          <div class="step-card">
+            <div class="step-num">2</div>
+            <h3>We analyze &amp; quote</h3>
+            <p>Live analysis: contract type, storage slot count, bytecode size, proxy detection, dependency graph. You get a detailed quote before paying anything. Download a free sample to verify quality.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-num">3</div>
+            <h3>Pay once, get your clone</h3>
+            <p>Approve USDC. We deploy. You get a full report: old → new address mapping, explorer links, download ZIP. No account to manage. No recurring charges. One transaction.</p>
+          </div>
         </div>
-        <!-- Paid tier -->
-        <div class="bg-white border border-gray-200 rounded-2xl p-8 shadow-sm">
-          <h3 class="text-2xl font-bold mb-2 text-gray-900 mt-2">Any EVM Chain</h3>
-          <div class="text-4xl font-extrabold text-gray-900 mb-1">From $5</div>
-          <p class="text-sm text-gray-500 mb-4">Pay with USDC &mdash; volume-based</p>
-          <p class="text-gray-600 text-sm mb-6 leading-relaxed">Migrate to Base, Polygon, Arbitrum, Ethereum, or any EVM-compatible chain. Extract any contract &mdash; no ownership required.</p>
-          <ul class="space-y-3 text-sm text-gray-700 mb-8">
-            <li class="flex items-start gap-2">
-              <svg class="w-5 h-5 text-indigo-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-              Any contract, no ownership required
-            </li>
-            <li class="flex items-start gap-2">
-              <svg class="w-5 h-5 text-indigo-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-              Up to 500 contracts per job
-            </li>
-            <li class="flex items-start gap-2">
-              <svg class="w-5 h-5 text-indigo-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-              Deploy to any EVM destination chain
-            </li>
-            <li class="flex items-start gap-2">
-              <svg class="w-5 h-5 text-indigo-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-              Gas costs on destination chain included
-            </li>
-            <li class="flex items-start gap-2">
-              <svg class="w-5 h-5 text-indigo-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-              Source code recovery included &mdash; no surcharge
-            </li>
-          </ul>
-          <a href="#start" class="btn-outline block text-center text-sm font-semibold px-6 py-3 rounded-lg">
-            Get a Quote
-          </a>
+      </div>
+    </section>
+
+    <!-- What we clone -->
+    <section class="section" style="padding-top: 0;">
+      <div class="container">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+          <div style="background: var(--bg-alt); border: 1px solid var(--border); border-radius: 16px; padding: 32px;">
+            <div style="font-size: 1.3rem; margin-bottom: 12px;">✓</div>
+            <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 16px; color: var(--text);">What we migrate</h3>
+            <ul style="list-style: none; display: flex; flex-direction: column; gap: 10px;">
+              <li style="display: flex; gap: 10px; font-size: 0.9rem; color: var(--text-secondary);"><span style="color: var(--green); font-weight: 700;">✓</span> Compiled bytecode (exact copy)</li>
+              <li style="display: flex; gap: 10px; font-size: 0.9rem; color: var(--text-secondary);"><span style="color: var(--green); font-weight: 700;">✓</span> All storage slots and state variables</li>
+              <li style="display: flex; gap: 10px; font-size: 0.9rem; color: var(--text-secondary);"><span style="color: var(--green); font-weight: 700;">✓</span> Native balance (ETH/BNB/MATIC)</li>
+              <li style="display: flex; gap: 10px; font-size: 0.9rem; color: var(--text-secondary);"><span style="color: var(--green); font-weight: 700;">✓</span> Constructor arguments (inferred)</li>
+              <li style="display: flex; gap: 10px; font-size: 0.9rem; color: var(--text-secondary);"><span style="color: var(--green); font-weight: 700;">✓</span> Proxy/implementation pairs</li>
+              <li style="display: flex; gap: 10px; font-size: 0.9rem; color: var(--text-secondary);"><span style="color: var(--green); font-weight: 700;">✓</span> Token balances (ERC-20, ERC-721, ERC-1155)</li>
+              <li style="display: flex; gap: 10px; font-size: 0.9rem; color: var(--text-secondary);"><span style="color: var(--green); font-weight: 700;">✓</span> Contract dependencies (optional)</li>
+            </ul>
+          </div>
+          <div style="background: var(--bg-alt); border: 1px solid var(--border); border-radius: 16px; padding: 32px;">
+            <div style="font-size: 1.3rem; margin-bottom: 12px;">✗</div>
+            <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 16px; color: var(--text);">What we don't migrate</h3>
+            <ul style="list-style: none; display: flex; flex-direction: column; gap: 10px;">
+              <li style="display: flex; gap: 10px; font-size: 0.9rem; color: var(--text-secondary);"><span style="color: #ef4444; font-weight: 700;">✗</span> Transaction history</li>
+              <li style="display: flex; gap: 10px; font-size: 0.9rem; color: var(--text-secondary);"><span style="color: #ef4444; font-weight: 700;">✗</span> Events and logs</li>
+              <li style="display: flex; gap: 10px; font-size: 0.9rem; color: var(--text-secondary);"><span style="color: #ef4444; font-weight: 700;">✗</span> External contract references (addresses)</li>
+              <li style="display: flex; gap: 10px; font-size: 0.9rem; color: var(--text-secondary);"><span style="color: #ef4444; font-weight: 700;">✗</span> Off-chain data and oracles</li>
+              <li style="display: flex; gap: 10px; font-size: 0.9rem; color: var(--text-secondary);"><span style="color: #ef4444; font-weight: 700;">✗</span> Gas price history</li>
+              <li style="display: flex; gap: 10px; font-size: 0.9rem; color: var(--text-secondary);"><span style="color: #ef4444; font-weight: 700;">✗</span> Bridge positions or cross-chain state</li>
+            </ul>
+          </div>
         </div>
+      </div>
+    </section>
+
+    <!-- Pricing -->
+    <section id="pricing" class="section" style="padding-top: 0;">
+      <div class="container">
+        <h2 class="section-title">Pricing</h2>
+        <p class="section-sub">Per-contract pricing. Pay only for what you migrate. Volume discounts apply automatically.</p>
+
+        <table class="pricing-table">
+          <thead>
+            <tr>
+              <th>Destination</th>
+              <th>Price per contract</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="badge-dest"><span class="chain-dot green"></span>L2aaS chain (your own)</span></td>
+              <td><span class="free">Free</span></td>
+              <td style="color: var(--text-secondary); font-size: 0.85rem;">Always free — migrate to your own L2</td>
+            </tr>
+            <tr>
+              <td><span class="badge-dest"><span class="chain-dot"></span>Export to ZIP file</span></td>
+              <td><span class="price">$47.50</span> <span style="color: var(--text-secondary); font-size: 0.8rem;">USDC</span></td>
+              <td style="color: var(--text-secondary); font-size: 0.85rem;">Bytecode + state — import anywhere</td>
+            </tr>
+            <tr>
+              <td><span class="badge-dest"><span class="chain-dot"></span>Base / Arbitrum / Optimism / Polygon</span></td>
+              <td><span class="price">$97.53</span> <span style="color: var(--text-secondary); font-size: 0.8rem;">USDC</span></td>
+              <td style="color: var(--text-secondary); font-size: 0.85rem;">We deploy directly on-chain for you</td>
+            </tr>
+            <tr>
+              <td><span class="badge-dest"><span class="chain-dot"></span>BNB Chain</span></td>
+              <td><span class="price">$31.17</span> <span style="color: var(--text-secondary); font-size: 0.8rem;">USDC</span></td>
+              <td style="color: var(--text-secondary); font-size: 0.85rem;">Lower gas than EVM L2s</td>
+            </tr>
+            <tr>
+              <td><span class="badge-dest"><span class="chain-dot"></span>Ethereum L1</span></td>
+              <td><span class="price">$478.21</span> <span style="color: var(--text-secondary); font-size: 0.8rem;">USDC</span></td>
+              <td style="color: var(--text-secondary); font-size: 0.85rem;">Includes gas budget on mainnet</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3 style="font-size: 1rem; font-weight: 700; margin-top: 40px; margin-bottom: 8px;">Volume discounts</h3>
+        <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 16px;">Discounts apply automatically at checkout when you enter multiple addresses.</p>
+        <table class="discount-table">
+          <thead>
+            <tr>
+              <th>Contracts in one order</th>
+              <th>Discount</th>
+              <th>Example (L2 chain)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>1–4</td><td>—</td><td>$97.53 each</td></tr>
+            <tr><td>5–9</td><td><span class="discount-pct">5% off</span></td><td>$92.65 each</td></tr>
+            <tr><td>10–19</td><td><span class="discount-pct">10% off</span></td><td>$87.78 each</td></tr>
+            <tr><td>20–49</td><td><span class="discount-pct">20% off</span></td><td>$78.02 each</td></tr>
+            <tr><td>50–99</td><td><span class="discount-pct">30% off</span></td><td>$68.27 each</td></tr>
+            <tr><td>100+</td><td><span class="discount-pct">40% off</span></td><td>$58.52 each</td></tr>
+          </tbody>
+        </table>
+
+        <div style="background: #fdf4ff; border: 1px solid #e9d5ff; border-radius: 10px; padding: 16px 20px; margin-top: 20px; font-size: 0.9rem; color: #6b21a8;">
+          <strong>Refund policy:</strong> If we are unable to complete the migration, you receive a full refund minus any gas costs already spent on the destination chain. Gas costs are non-refundable under any circumstances — they are burned on-chain and cannot be recovered.
+        </div>
+      </div>
+    </section>
+
+    <!-- Chains -->
+    <section id="chains" class="section" style="padding-top: 0;">
+      <div class="container">
+        <h2 class="section-title">Supported source chains</h2>
+        <p class="section-sub">Read contracts from any EVM chain. Custom RPC also accepted.</p>
+        <div class="chains-grid">
+          <div class="chain-card"><span class="chain-dot" style="background:#627eea"></span><div><div class="chain-name">Ethereum</div><div class="chain-id">chainId 1</div></div></div>
+          <div class="chain-card"><span class="chain-dot" style="background:#0052ff"></span><div><div class="chain-name">Base</div><div class="chain-id">chainId 8453</div></div></div>
+          <div class="chain-card"><span class="chain-dot" style="background:#ff0420"></span><div><div class="chain-name">Optimism</div><div class="chain-id">chainId 10</div></div></div>
+          <div class="chain-card"><span class="chain-dot" style="background:#28a0f0"></span><div><div class="chain-name">Arbitrum</div><div class="chain-id">chainId 42161</div></div></div>
+          <div class="chain-card"><span class="chain-dot" style="background:#8247e5"></span><div><div class="chain-name">Polygon</div><div class="chain-id">chainId 137</div></div></div>
+          <div class="chain-card"><span class="chain-dot" style="background:#f0b90b"></span><div><div class="chain-name">BNB Chain</div><div class="chain-id">chainId 56</div></div></div>
+          <div class="chain-card"><span class="chain-dot" style="background:#e84142"></span><div><div class="chain-name">Avalanche</div><div class="chain-id">chainId 43114</div></div></div>
+          <div class="chain-card" style="border-style: dashed;"><span class="chain-dot" style="background: var(--purple)"></span><div><div class="chain-name">Custom RPC</div><div class="chain-id">any EVM</div></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section" style="padding-top: 0;">
+      <div class="container">
+        <h2 class="section-title">Frequently asked questions</h2>
+        <p class="section-sub" style="margin-bottom: 32px;">Common questions about contract migration.</p>
+        <div class="faq">
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">
+              Do I need an account or API key?
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+            <div class="faq-a"><div class="faq-a-inner">No. ChainClone is a one-shot vending machine. You come, you analyze, you pay, you get your clone. No account, no API key, no recurring subscription. Your job URL is your receipt — bookmark it if you want to reference the results later.</div></div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">
+              Is the clone an exact copy of the original?
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+            <div class="faq-a"><div class="faq-a-inner">The bytecode is exactly copied — same logic, same ABI, same function selectors. Storage state is enumerated and replanted. What differs: the contract address will be different (new deployment), transaction history is not migrated, and any hardcoded references to external addresses inside the contract still point to the source chain's contracts.</div></div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">
+              What is the free sample download?
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+            <div class="faq-a"><div class="faq-a-inner">Before you pay, we offer a free ZIP of the first contract's bytecode and storage structure analysis. This is enough to verify that we correctly identified the contract type, slot layout, and ABI — but not enough to deploy it yourself without buying the full migration. Think of it as a proof of quality.</div></div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">
+              What happens if the migration fails?
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+            <div class="faq-a"><div class="faq-a-inner">You receive a full refund minus any gas costs already spent on the destination chain. Gas fees paid to the destination chain are burned on-chain and cannot be recovered under any circumstances. If migration fails before any on-chain activity, you receive a 100% refund.</div></div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">
+              Can I clone contracts I don't own?
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+            <div class="faq-a"><div class="faq-a-inner">Technically yes — blockchain data is public. You are responsible for ensuring you have the legal right to clone any contract. We do not check ownership. You accept full responsibility for compliance with relevant laws, licenses, and terms of service of the original contract. See our Terms for details.</div></div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">
+              What payment methods do you accept?
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+            <div class="faq-a"><div class="faq-a-inner">USDC and USDT via wallet connect (MetaMask, WalletConnect, Coinbase Wallet). You connect your wallet, approve the exact amount, and the payment is verified on-chain before we start. No credit cards, no wire transfers.</div></div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">
+              What is L2aaS?
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+            <div class="faq-a"><div class="faq-a-inner">L2aaS is our sister service that provisions your own dedicated blockchain. If you migrate contracts to an L2aaS chain, the migration is always free. It's our way of making it easy to seed your new chain with existing, battle-tested contracts from mainnet.</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <div class="container">
+      <div class="cta-band">
+        <h2>Ready to clone?</h2>
+        <p>No account. No subscription. Just paste addresses and pay once.</p>
+        <a href="/migrate.html" class="btn btn-white">Start your migration →</a>
       </div>
     </div>
-  </section>
 
-  <!-- What We Migrate -->
-  <section id="what-we-migrate" class="py-24 border-t border-gray-100">
-    <div class="max-w-6xl mx-auto px-6">
-      <div class="text-center mb-16">
-        <h2 class="text-3xl md:text-4xl font-bold mb-4 text-gray-900">What we migrate</h2>
-        <p class="text-gray-600 max-w-xl mx-auto">A complete snapshot of on-chain state, redeployed on your destination chain.</p>
-      </div>
-      <div class="grid md:grid-cols-2 gap-12 max-w-4xl mx-auto">
-        <!-- We DO migrate -->
-        <div>
-          <h3 class="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-            <svg class="w-6 h-6 text-emerald-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-            Included
-          </h3>
-          <ul class="space-y-4">
-            <li class="flex items-start gap-3">
-              <div class="w-2 h-2 rounded-full bg-emerald-400 mt-2 flex-shrink-0"></div>
-              <div>
-                <span class="font-semibold text-gray-900">Contract bytecode</span>
-                <p class="text-sm text-gray-600 mt-0.5">The compiled contract code, deployed as-is on the destination chain.</p>
-              </div>
-            </li>
-            <li class="flex items-start gap-3">
-              <div class="w-2 h-2 rounded-full bg-emerald-400 mt-2 flex-shrink-0"></div>
-              <div>
-                <span class="font-semibold text-gray-900">Storage state</span>
-                <p class="text-sm text-gray-600 mt-0.5">All storage slots &mdash; mappings, arrays, variables &mdash; replicated exactly.</p>
-              </div>
-            </li>
-            <li class="flex items-start gap-3">
-              <div class="w-2 h-2 rounded-full bg-emerald-400 mt-2 flex-shrink-0"></div>
-              <div>
-                <span class="font-semibold text-gray-900">Account balances</span>
-                <p class="text-sm text-gray-600 mt-0.5">Native token and ERC-20 balances for specified accounts.</p>
-              </div>
-            </li>
-            <li class="flex items-start gap-3">
-              <div class="w-2 h-2 rounded-full bg-emerald-400 mt-2 flex-shrink-0"></div>
-              <div>
-                <span class="font-semibold text-gray-900">Token ownership</span>
-                <p class="text-sm text-gray-600 mt-0.5">ERC-721 and ERC-1155 ownership records, fully reconstructed.</p>
-              </div>
-            </li>
-          </ul>
-        </div>
-        <!-- We DON'T migrate -->
-        <div>
-          <h3 class="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-            <svg class="w-6 h-6 text-red-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-            Not included
-          </h3>
-          <ul class="space-y-4">
-            <li class="flex items-start gap-3">
-              <div class="w-2 h-2 rounded-full bg-red-300 mt-2 flex-shrink-0"></div>
-              <div>
-                <span class="font-semibold text-gray-900">Transaction history</span>
-                <p class="text-sm text-gray-600 mt-0.5">Past transactions cannot be replayed on a different chain. This is a fundamental blockchain constraint.</p>
-              </div>
-            </li>
-            <li class="flex items-start gap-3">
-              <div class="w-2 h-2 rounded-full bg-red-300 mt-2 flex-shrink-0"></div>
-              <div>
-                <span class="font-semibold text-gray-900">External dependencies</span>
-                <p class="text-sm text-gray-600 mt-0.5">Oracles, bridges, and off-chain services that the contract relies on must be configured separately on the destination chain.</p>
-              </div>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
+  </main>
 
-  <!-- Source Code Recovery -->
-  <section id="source-recovery" class="py-24 bg-gray-50 border-t border-gray-100">
-    <div class="max-w-6xl mx-auto px-6">
-      <div class="text-center mb-16">
-        <h2 class="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Smart contract source code recovery</h2>
-        <p class="text-gray-600 max-w-xl mx-auto">Every extraction includes the source code &mdash; at no extra charge.</p>
+  <footer>
+    <div class="container inner">
+      <div class="links">
+        <a href="/">ChainClone</a>
+        <a href="/migrate.html">Migrate</a>
+        <a href="/docs.html">Docs</a>
+        <a href="/terms.html">Terms</a>
       </div>
-      <div class="grid md:grid-cols-3 gap-8">
-        <div class="bg-white border border-gray-200 rounded-2xl p-8 shadow-sm hover:shadow-md transition">
-          <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center mb-5">
-            <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-          </div>
-          <h3 class="text-lg font-semibold mb-2 text-gray-900">Verified Source</h3>
-          <p class="text-gray-600 text-sm leading-relaxed mb-4">If the contract is verified on Etherscan, you get the original Solidity source code &mdash; complete with comments, variable names, and license.</p>
-          <span class="inline-block bg-emerald-50 text-emerald-700 text-xs font-semibold px-3 py-1 rounded-full">Best quality</span>
-        </div>
-        <div class="bg-white border border-gray-200 rounded-2xl p-8 shadow-sm hover:shadow-md transition">
-          <div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center mb-5">
-            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
-          </div>
-          <h3 class="text-lg font-semibold mb-2 text-gray-900">Decompiled Source</h3>
-          <p class="text-gray-600 text-sm leading-relaxed mb-4">Unverified contracts are decompiled using bytecode analysis. Function signatures are resolved from the global 4byte directory. You get readable pseudo-Solidity.</p>
-          <span class="inline-block bg-blue-50 text-blue-700 text-xs font-semibold px-3 py-1 rounded-full">Good quality</span>
-        </div>
-        <div class="bg-white border border-gray-200 rounded-2xl p-8 shadow-sm hover:shadow-md transition">
-          <div class="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center mb-5">
-            <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 7v10c0 2 1 3 3 3h10c2 0 3-1 3-3V7c0-2-1-3-3-3H7c-2 0-3 1-3 3z"/><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6"/></svg>
-          </div>
-          <h3 class="text-lg font-semibold mb-2 text-gray-900">Raw Bytecode</h3>
-          <p class="text-gray-600 text-sm leading-relaxed mb-4">When decompilation is not possible, you still get the full bytecode &mdash; ready to deploy as-is on any EVM chain.</p>
-          <span class="inline-block bg-gray-100 text-gray-700 text-xs font-semibold px-3 py-1 rounded-full">Always available</span>
-        </div>
-      </div>
-      <p class="text-center mt-8 text-sm text-gray-500">Source code recovery is included with every extraction &mdash; free for L2aaS coupon users, included in paid migrations.</p>
-    </div>
-  </section>
-
-  <!-- Supported Chains -->
-  <section class="py-24 bg-white border-t border-gray-100">
-    <div class="max-w-6xl mx-auto px-6">
-      <div class="text-center mb-16">
-        <h2 class="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Supported chains</h2>
-        <p class="text-gray-600 max-w-xl mx-auto">Read from any of these. Write to any of these. Mix and match.</p>
-      </div>
-      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6 max-w-4xl mx-auto">
-        <div class="bg-white border border-gray-200 rounded-xl p-6 text-center shadow-sm hover:shadow-md transition">
-          <div class="text-2xl font-bold text-gray-900 mb-1">Ethereum</div>
-          <div class="text-xs text-gray-500">Mainnet</div>
-        </div>
-        <div class="bg-white border border-gray-200 rounded-xl p-6 text-center shadow-sm hover:shadow-md transition">
-          <div class="text-2xl font-bold text-gray-900 mb-1">Base</div>
-          <div class="text-xs text-gray-500">Coinbase L2</div>
-        </div>
-        <div class="bg-white border border-gray-200 rounded-xl p-6 text-center shadow-sm hover:shadow-md transition">
-          <div class="text-2xl font-bold text-gray-900 mb-1">Optimism</div>
-          <div class="text-xs text-gray-500">OP Mainnet</div>
-        </div>
-        <div class="bg-white border border-gray-200 rounded-xl p-6 text-center shadow-sm hover:shadow-md transition">
-          <div class="text-2xl font-bold text-gray-900 mb-1">Arbitrum</div>
-          <div class="text-xs text-gray-500">Arbitrum One</div>
-        </div>
-        <div class="bg-white border border-gray-200 rounded-xl p-6 text-center shadow-sm hover:shadow-md transition">
-          <div class="text-2xl font-bold text-gray-900 mb-1">Polygon</div>
-          <div class="text-xs text-gray-500">PoS Chain</div>
-        </div>
-      </div>
-      <p class="text-center text-sm text-gray-500 mt-8">Plus any EVM-compatible chain with a public RPC endpoint.</p>
-    </div>
-  </section>
-
-  <!-- FAQ -->
-  <section id="faq" class="py-24 border-t border-gray-100">
-    <div class="max-w-3xl mx-auto px-6">
-      <div class="text-center mb-16">
-        <h2 class="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Frequently asked questions</h2>
-      </div>
-      <div class="space-y-4">
-        <!-- FAQ 1 -->
-        <div class="border border-gray-200 rounded-xl overflow-hidden">
-          <button class="faq-toggle w-full text-left px-6 py-5 flex items-center justify-between bg-white hover:bg-gray-50 transition" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open')">
-            <span class="font-semibold text-gray-900">Is this legal?</span>
-            <svg class="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
-          </button>
-          <div class="faq-answer px-6 bg-white">
-            <p class="pb-5 text-gray-600 text-sm leading-relaxed">Yes. All blockchain data is public by design. We read publicly available on-chain state &mdash; contract bytecode, storage slots, and account balances. No private data is accessed, and no authentication to the source chain is required.</p>
-          </div>
-        </div>
-        <!-- FAQ 2 -->
-        <div class="border border-gray-200 rounded-xl overflow-hidden">
-          <button class="faq-toggle w-full text-left px-6 py-5 flex items-center justify-between bg-white hover:bg-gray-50 transition" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open')">
-            <span class="font-semibold text-gray-900">Will contract addresses change?</span>
-            <svg class="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
-          </button>
-          <div class="faq-answer px-6 bg-white">
-            <p class="pb-5 text-gray-600 text-sm leading-relaxed">Yes. Contracts are deployed fresh on the destination chain, so they receive new addresses. We provide a complete mapping of source addresses to destination addresses after migration is complete.</p>
-          </div>
-        </div>
-        <!-- FAQ 3 -->
-        <div class="border border-gray-200 rounded-xl overflow-hidden">
-          <button class="faq-toggle w-full text-left px-6 py-5 flex items-center justify-between bg-white hover:bg-gray-50 transition" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open')">
-            <span class="font-semibold text-gray-900">How long does it take?</span>
-            <svg class="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
-          </button>
-          <div class="faq-answer px-6 bg-white">
-            <p class="pb-5 text-gray-600 text-sm leading-relaxed">Minutes for simple contracts. A few hours for complex deployments with many interdependent contracts and large storage footprints. We provide real-time progress updates throughout the migration.</p>
-          </div>
-        </div>
-        <!-- FAQ 4 -->
-        <div class="border border-gray-200 rounded-xl overflow-hidden">
-          <button class="faq-toggle w-full text-left px-6 py-5 flex items-center justify-between bg-white hover:bg-gray-50 transition" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open')">
-            <span class="font-semibold text-gray-900">What about contract dependencies?</span>
-            <svg class="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
-          </button>
-          <div class="faq-answer px-6 bg-white">
-            <p class="pb-5 text-gray-600 text-sm leading-relaxed">Contracts that reference other contracts need all dependencies migrated together. We analyze the full dependency graph before migration begins and deploy everything in the correct order, updating internal references to point to the new addresses.</p>
-          </div>
-        </div>
-        <!-- FAQ 5 -->
-        <div class="border border-gray-200 rounded-xl overflow-hidden">
-          <button class="faq-toggle w-full text-left px-6 py-5 flex items-center justify-between bg-white hover:bg-gray-50 transition" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open')">
-            <span class="font-semibold text-gray-900">How do I pay?</span>
-            <svg class="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
-          </button>
-          <div class="faq-answer px-6 bg-white">
-            <p class="pb-5 text-gray-600 text-sm leading-relaxed">We accept Visa, Mastercard, and USDC. No crypto wallet required &mdash; pay with your regular credit card. You receive a quote based on contract complexity, approve it, and send payment. L2aaS migrations are completely free.</p>
-          </div>
-        </div>
-        <!-- FAQ 6 -->
-        <div class="border border-gray-200 rounded-xl overflow-hidden">
-          <button class="faq-toggle w-full text-left px-6 py-5 flex items-center justify-between bg-white hover:bg-gray-50 transition" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open')">
-            <span class="font-semibold text-gray-900">What is a .l2aas file?</span>
-            <svg class="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
-          </button>
-          <div class="faq-answer px-6 bg-white">
-            <p class="pb-5 text-gray-600 text-sm leading-relaxed">A .l2aas file is an encrypted export of contract bytecode, storage state, and balances. It can only be imported on <a href="https://l2aas.net" class="text-indigo-600 underline hover:text-indigo-800">l2aas.net</a>. L2aaS customers can use the coupon code <code class="bg-gray-100 px-1.5 py-0.5 rounded text-sm font-mono">l2aas</code> to extract data for free. Get your own blockchain at <a href="https://l2aas.net" class="text-indigo-600 underline hover:text-indigo-800">l2aas.net</a>.</p>
-          </div>
-        </div>
-        <!-- FAQ 7 -->
-        <div class="border border-gray-200 rounded-xl overflow-hidden">
-          <button class="faq-toggle w-full text-left px-6 py-5 flex items-center justify-between bg-white hover:bg-gray-50 transition" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open')">
-            <span class="font-semibold text-gray-900">Do I get the source code?</span>
-            <svg class="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
-          </button>
-          <div class="faq-answer px-6 bg-white">
-            <p class="pb-5 text-gray-600 text-sm leading-relaxed">Yes. For verified contracts, you get the original Solidity source code with comments and variable names. For unverified contracts, we decompile the bytecode into readable pseudo-Solidity &mdash; an approximation that shows function signatures and structure. Raw bytecode is always included regardless. Source code recovery is free &mdash; no extra charge on any plan.</p>
-          </div>
-        </div>
-        <!-- FAQ 8 -->
-        <div class="border border-gray-200 rounded-xl overflow-hidden">
-          <button class="faq-toggle w-full text-left px-6 py-5 flex items-center justify-between bg-white hover:bg-gray-50 transition" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open')">
-            <span class="font-semibold text-gray-900">Can I modify the source before deploying?</span>
-            <svg class="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
-          </button>
-          <div class="faq-answer px-6 bg-white">
-            <p class="pb-5 text-gray-600 text-sm leading-relaxed">Yes. When importing on L2aaS, you can view and edit the source code before deploying to your chain. Change parameters, rename tokens, adjust logic &mdash; then compile and deploy. For verified contracts, you get the full original Solidity to work with.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CTA / Start -->
-  <section id="start" class="py-24 bg-gradient-to-br from-indigo-50 via-white to-violet-50 border-t border-gray-100">
-    <div class="max-w-3xl mx-auto px-6 text-center">
-      <h2 class="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Start your migration</h2>
-      <p class="text-gray-600 text-lg mb-6 leading-relaxed">
-        Connect your wallet, enter the source chain and contract addresses, and download your encrypted .l2aas file.
-      </p>
-      <p class="text-sm text-gray-500 mb-10">Your wallet is your identity &mdash; no accounts needed. Sign with MetaMask, Coinbase Wallet, or any Web3 wallet.</p>
-
-      <div class="max-w-lg mx-auto text-left">
-        <!-- Wallet connect -->
-        <div class="bg-white border border-gray-200 rounded-xl p-6 mb-6 shadow-sm">
-          <div class="flex items-center justify-between mb-3">
-            <label class="text-sm font-semibold text-gray-900">1. Connect your wallet</label>
-            <span id="walletStatus" class="text-xs text-gray-400"></span>
-          </div>
-          <button id="connectBtn" onclick="connectWallet()" class="btn-primary w-full text-sm font-semibold px-6 py-3 rounded-lg shadow-sm">
-            Connect Wallet
-          </button>
-        </div>
-
-        <!-- Source chain -->
-        <div class="bg-white border border-gray-200 rounded-xl p-6 mb-6 shadow-sm">
-          <label class="block text-sm font-semibold text-gray-900 mb-2">2. Source chain</label>
-          <select id="sourceChain" class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
-            <option value="ethereum">Ethereum Mainnet</option>
-            <option value="base">Base</option>
-            <option value="optimism">Optimism</option>
-            <option value="arbitrum">Arbitrum One</option>
-            <option value="polygon">Polygon PoS</option>
-          </select>
-        </div>
-
-        <!-- Contract addresses -->
-        <div class="bg-white border border-gray-200 rounded-xl p-6 mb-6 shadow-sm">
-          <label class="block text-sm font-semibold text-gray-900 mb-2">3. Contract addresses (one per line)</label>
-          <textarea id="contractAddresses" rows="4" placeholder="0x1234...&#10;0x5678..." class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 resize-vertical"></textarea>
-        </div>
-
-        <!-- Coupon code -->
-        <div class="bg-white border border-gray-200 rounded-xl p-6 mb-6 shadow-sm">
-          <label class="block text-sm font-semibold text-gray-900 mb-2">4. Coupon code</label>
-          <div class="flex gap-2">
-            <input type="text" id="couponInput" placeholder="Enter coupon code" class="flex-1 border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
-            <button onclick="validateCoupon()" class="btn-primary text-sm font-semibold px-5 py-2.5 rounded-lg shadow-sm">Apply</button>
-          </div>
-          <p id="couponResult" class="text-sm mt-2"></p>
-          <p class="text-xs text-gray-400 mt-1">L2aaS customers: enter <code class="bg-gray-100 px-1 py-0.5 rounded font-mono">l2aas</code> for free extraction</p>
-        </div>
-
-        <!-- Extract button -->
-        <button id="extractBtn" onclick="extractFree()" disabled class="btn-primary w-full text-base font-semibold px-6 py-4 rounded-xl shadow-md opacity-50 cursor-not-allowed">
-          Extract &amp; Download .l2aas File
-        </button>
-        <p id="extractStatus" class="text-sm mt-3 text-center"></p>
-        <p class="text-xs text-gray-500 mt-4 text-center">File is encrypted to your wallet &mdash; only you can import it on <a href="https://l2aas.net" class="text-indigo-600 underline">L2aaS</a>.</p>
-      </div>
-
-      <div class="mt-10 pt-8 border-t border-gray-200">
-        <p class="text-sm text-gray-500">Need a paid migration to another EVM chain?</p>
-        <a href="mailto:migrate@chainclone.net" class="text-sm text-indigo-600 font-semibold hover:underline">migrate@chainclone.net</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="border-t border-gray-200 py-8 bg-white">
-    <div class="max-w-6xl mx-auto px-6">
-      <div class="flex items-center justify-between">
-        <div class="text-sm text-gray-500">&copy; 2026 ChainClone</div>
-        <a href="/terms.html" class="text-sm text-gray-500 hover:text-gray-700 transition">Terms</a>
-      </div>
-      <div class="mt-4 pt-4 border-t border-gray-100 flex flex-wrap items-center gap-4 text-xs text-gray-400">
-        <span>Also from us:</span>
-        <a href="https://sertone.net" class="hover:text-gray-600 transition">Sertone</a>
-        <a href="https://l2aas.net" class="hover:text-gray-600 transition">L2aaS</a>
-        <a href="https://chainrpc.net" class="hover:text-gray-600 transition">ChainRPC</a>
-        <a href="https://pingdog.net" class="hover:text-gray-600 transition">PingDog</a>
-        <a href="https://theloadtester.com" class="hover:text-gray-600 transition">LoadTester</a>
-        <a href="https://swarmbrowser.net" class="hover:text-gray-600 transition">SwarmBrowser</a>
-      </div>
+      <div class="copy">© 2026 ChainClone. All rights reserved.</div>
     </div>
   </footer>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.4/ethers.umd.min.js"></script>
   <script>
-    // --- Wallet state ---
-    let connectedWallet = null;
-    let walletAddress = null;
-    let couponValid = false;
-
-    async function connectWallet() {
-      if (!window.ethereum) {
-        alert('Please install MetaMask or another Web3 wallet to continue.');
-        return;
-      }
-      try {
-        const provider = new ethers.BrowserProvider(window.ethereum);
-        const signer = await provider.getSigner();
-        walletAddress = await signer.getAddress();
-
-        // Sign message to prove ownership (SIWE-style)
-        const message = 'ChainClone: I authorize blockchain data extraction.\nWallet: ' + walletAddress + '\nTimestamp: ' + Date.now();
-        const signature = await signer.signMessage(message);
-
-        connectedWallet = { address: walletAddress, signature: signature, message: message };
-
-        // Update UI
-        const short = walletAddress.slice(0, 6) + '...' + walletAddress.slice(-4);
-        document.getElementById('walletStatus').textContent = 'Connected: ' + short;
-        document.getElementById('walletStatus').className = 'text-xs text-green-600 font-medium';
-        document.getElementById('connectBtn').textContent = 'Connected: ' + short;
-        document.getElementById('connectBtn').classList.remove('btn-primary');
-        document.getElementById('connectBtn').classList.add('bg-green-600', 'text-white', 'hover:bg-green-700');
-        document.getElementById('navConnectBtn').textContent = short;
-        document.getElementById('navConnectBtn').classList.remove('border-indigo-600', 'text-indigo-600');
-        document.getElementById('navConnectBtn').classList.add('border-green-600', 'text-green-600');
-        updateExtractButton();
-      } catch (err) {
-        console.error('Wallet connect failed:', err);
-        alert('Wallet connection failed: ' + (err.message || err));
+    function toggleFaq(el) {
+      const answer = el.nextElementSibling;
+      const isOpen = answer.classList.contains('open');
+      // Close all
+      document.querySelectorAll('.faq-a').forEach(a => a.classList.remove('open'));
+      document.querySelectorAll('.faq-q').forEach(q => q.classList.remove('open'));
+      if (!isOpen) {
+        answer.classList.add('open');
+        el.classList.add('open');
       }
     }
-
-    function updateExtractButton() {
-      const btn = document.getElementById('extractBtn');
-      if (connectedWallet && couponValid) {
-        btn.disabled = false;
-        btn.classList.remove('opacity-50', 'cursor-not-allowed');
-      } else {
-        btn.disabled = true;
-        btn.classList.add('opacity-50', 'cursor-not-allowed');
-      }
-    }
-
-    // Coupon validation
-    function validateCoupon() {
-      const code = document.getElementById('couponInput').value.trim().toLowerCase();
-      const result = document.getElementById('couponResult');
-      if (code === 'l2aas') {
-        couponValid = true;
-        result.textContent = 'Coupon applied! Free extraction as encrypted .l2aas file.';
-        result.className = 'text-sm mt-2 text-green-600 font-medium';
-        // Update pricing display
-        const freeTier = document.querySelector('#pricing .border-indigo-200');
-        if (freeTier) {
-          freeTier.classList.add('ring-2', 'ring-green-500');
-          const badge = freeTier.querySelector('.bg-indigo-600');
-          if (badge) {
-            badge.textContent = 'Free with coupon';
-            badge.classList.remove('bg-indigo-600');
-            badge.classList.add('bg-green-600');
-          }
-        }
-      } else if (code === '') {
-        couponValid = false;
-        result.textContent = '';
-        result.className = 'text-sm mt-2';
-      } else {
-        couponValid = false;
-        result.textContent = 'Invalid coupon code.';
-        result.className = 'text-sm mt-2 text-red-600';
-      }
-      updateExtractButton();
-    }
-
-    // Free extraction — wallet-authenticated, ECDH-encrypted
-    async function extractFree() {
-      if (!connectedWallet) { alert('Connect your wallet first.'); return; }
-      if (!couponValid) { alert('Enter a valid coupon code.'); return; }
-
-      const chain = document.getElementById('sourceChain').value;
-      const addrsRaw = document.getElementById('contractAddresses').value;
-      const addrs = addrsRaw.split('\n').map(function(a) { return a.trim(); }).filter(function(a) { return a.length > 0; });
-
-      if (addrs.length === 0) { alert('Enter at least one contract address.'); return; }
-
-      const coupon = document.getElementById('couponInput').value.trim();
-      const statusEl = document.getElementById('extractStatus');
-      statusEl.textContent = 'Extracting and encrypting... this may take a moment.';
-      statusEl.className = 'text-sm mt-3 text-center text-amber-600';
-
-      try {
-        const resp = await fetch('/api/extract-free', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            sourceChain: chain,
-            addresses: addrs,
-            couponCode: coupon,
-            walletAddress: connectedWallet.address,
-            signature: connectedWallet.signature,
-            message: connectedWallet.message,
-          }),
-        });
-
-        if (resp.ok) {
-          const blob = await resp.blob();
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = 'chainclone-export-' + Date.now() + '.l2aas';
-          a.click();
-          URL.revokeObjectURL(url);
-          statusEl.textContent = 'Download started! Import this file at l2aas.net/data.html';
-          statusEl.className = 'text-sm mt-3 text-center text-green-600 font-medium';
-        } else {
-          const err = await resp.json();
-          statusEl.textContent = err.error || 'Extraction failed.';
-          statusEl.className = 'text-sm mt-3 text-center text-red-600';
-        }
-      } catch (err) {
-        statusEl.textContent = 'Network error: ' + (err.message || err);
-        statusEl.className = 'text-sm mt-3 text-center text-red-600';
-      }
-    }
-
-    // Allow Enter key in coupon input
-    document.getElementById('couponInput').addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') validateCoupon();
-    });
   </script>
 
 </body>
