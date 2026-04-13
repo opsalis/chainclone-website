@@ -481,6 +481,9 @@
   </footer>
 
   <script>
+    // ===== Config =====
+    const API_BASE = 'https://api.chainclone.net';
+
     // ===== State =====
     const state = {
       sourceChain: 'base',
@@ -591,7 +594,7 @@
 
         try {
           // Call backend analyze endpoint
-          const resp = await fetch('/api/analyze', {
+          const resp = await fetch(API_BASE + '/api/analyze', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ sourceChain: chain, address: addr, customRpc: customRpc || undefined }),
@@ -718,7 +721,7 @@
       btn.style.opacity = '0.7';
 
       try {
-        const resp = await fetch('/api/sample', {
+        const resp = await fetch(API_BASE + '/api/sample', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -867,7 +870,7 @@
 
       // Start migration via backend
       try {
-        const resp = await fetch('/api/execute', {
+        const resp = await fetch(API_BASE + '/api/execute', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -908,7 +911,7 @@
       while (!done) {
         await sleep(2000);
         try {
-          const resp = await fetch(`/api/job/${state.jobId}`);
+          const resp = await fetch(`${API_BASE}/api/job/${state.jobId}`);
           if (!resp.ok) break;
           const job = await resp.json();
 
@@ -1040,7 +1043,7 @@
       if (type === 'zip') {
         window.location.href = `/api/job/${state.jobId}/export?format=zip`;
       } else {
-        window.location.href = `/api/job/${state.jobId}/receipt.pdf`;
+        window.location.href = `${API_BASE}/api/job/${state.jobId}/receipt.pdf`;
       }
     }
 
@@ -1050,7 +1053,7 @@
       const jobId = params.get('job');
       if (jobId && !jobId.startsWith('demo-')) {
         try {
-          const resp = await fetch(`/api/job/${jobId}`);
+          const resp = await fetch(`${API_BASE}/api/job/${jobId}`);
           if (resp.ok) {
             const job = await resp.json();
             if (job.status === 'complete') {
